@@ -1,0 +1,393 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../translations/translations';
+import { updateUserDescription } from '../services/claudiaService';
+import { getDailySummary } from '../services/dailySummaryService';
+import TypingAnimation from '../components/TypingAnimation';
+
+const Claudia = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
+  // Chat states
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const messagesEndRef = useRef(null);
+
+  // Daily summary states
+  const [dailySummary, setDailySummary] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [summaryError, setSummaryError] = useState(null);
+  const [summaryDataLoading, setSummaryDataLoading] = useState(true);
+  const [adviceDataLoading, setAdviceDataLoading] = useState(true);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    // Load initial data when component mounts
+    loadInitialData();
+  }, []);
+
+  const loadInitialData = async () => {
+    // Load daily summary from API
+    await loadDailySummary();
+    
+    // Set initial chat message
+    const dummyMessage = {
+      id: Date.now(),
+      role: 'assistant',
+      content: language === 'en' 
+        ? "Hello! I'm Claudia, your AI financial assistant. I'm here to help you with your financial questions and provide personalized advice based on your situation. How can I assist you today?"
+        : "Halo! Saya Claudia, asisten keuangan AI Anda. Saya di sini untuk membantu Anda dengan pertanyaan keuangan dan memberikan saran yang dipersonalisasi berdasarkan situasi Anda. Bagaimana saya bisa membantu Anda hari ini?",
+      timestamp: new Date().toISOString(),
+      type: 'introduction'
+    };
+    setMessages([dummyMessage]);
+  };
+
+  // Load daily summary when language changes
+  useEffect(() => {
+    if (dailySummary) {
+      loadDailySummary();
+    }
+  }, [language]);
+
+  const loadDailySummary = async () => {
+    setSummaryLoading(true);
+    setSummaryDataLoading(true);
+    setAdviceDataLoading(true);
+    setSummaryError(null);
+    
+    try {
+      const response = await getDailySummary();
+      console.log('Daily Summary API Response:', response);
+      // Access the nested data structure
+      setDailySummary(response.data?.daily_summary || response);
+      
+      // Simulate separate loading for each section
+      setTimeout(() => {
+        setSummaryDataLoading(false);
+      }, 500);
+      
+      setTimeout(() => {
+        setAdviceDataLoading(false);
+      }, 800);
+      
+    } catch (err) {
+      console.error('Daily Summary Error:', err);
+      setSummaryError(err.message || 'Failed to load daily summary');
+      setSummaryDataLoading(false);
+      setAdviceDataLoading(false);
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
+
+
+  const handleSendMessage = async (messageOverride) => {
+    // Ensure we're working with strings and handle edge cases
+    const messageText = messageOverride ?? inputMessage;
+    const textToSend = typeof messageText === 'string' ? messageText.trim() : '';
+    if (!textToSend || isLoading) return;
+
+    const userMessage = {
+      id: Date.now(),
+      role: 'user',
+      content: textToSend,
+      timestamp: new Date().toISOString()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+    setShowSuggestions(false);
+    setIsLoading(true);
+    setIsTyping(true);
+    setError(null);
+
+    try {
+      const response = await updateUserDescription(textToSend);
+      
+      if (response.success) {
+        const assistantMessage = {
+          id: Date.now() + 1,
+          role: 'assistant',
+          content: response.message,
+          timestamp: new Date().toISOString(),
+          type: 'response'
+        };
+        
+        setMessages(prev => [...prev, assistantMessage]);
+        
+        // If daily summary was reset, reload the daily summary from API
+        if (response.data?.daily_summary_reset) {
+          loadDailySummary();
+        }
+      } else {
+        setError(response.error || 'Failed to update preferences');
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to send message');
+    } finally {
+      setIsLoading(false);
+      setIsTyping(false);
+    }
+  };
+
+  const handleSuggestionClick = (text) => {
+    if (isLoading) return;
+    setShowSuggestions(false);
+    handleSendMessage(text);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const formatTime = (timestamp) => {
+    try {
+      return new Date(timestamp).toLocaleTimeString([], { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
+    } catch {
+      return '';
+    }
+  };
+
+  const formatDate = (dateString) => {
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch {
+      return dateString;
+    }
+  };
+
+  return (
+    <div className="claudia-page-container">
+      {/* Daily Summary Section - 3/4 width */}
+      <div className="daily-summary-section">
+        {/* Summary and Advice - Top Half */}
+        <div className="summary-content">
+          {summaryError ? (
+            <div className="summary-error">
+              <p>{summaryError}</p>
+              <button onClick={loadDailySummary} className="btn btn-primary">
+                {t.tryAgain}
+              </button>
+            </div>
+          ) : (
+            <div className="summary-text-content">
+              <div className="summary-paragraph">
+                <h3>{t.dailySummary}</h3>
+                {summaryDataLoading ? (
+                  <div className="paragraph-loading">
+                    <div className="loading-spinner"></div>
+                    <p>Loading daily summary...</p>
+                  </div>
+                ) : (
+                  <p>{language === 'en' ? (dailySummary?.summary_en || dailySummary?.summary) : (dailySummary?.summary_id || dailySummary?.summary) || "No summary available"}</p>
+                )}
+              </div>
+              <div className="advice-paragraph">
+                <h3>{t.claudiaAdvice}</h3>
+                {adviceDataLoading ? (
+                  <div className="paragraph-loading">
+                    <div className="loading-spinner"></div>
+                    <p>Loading advice...</p>
+                  </div>
+                ) : (
+                  <p>{language === 'en' ? (dailySummary?.advice_en || dailySummary?.advice) : (dailySummary?.advice_id || dailySummary?.advice) || "No advice available"}</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* News Articles - Bottom Half */}
+        <div className="news-articles-section">
+          <h3>{t.relatedNews}</h3>
+          <div className="news-articles-container">
+            {summaryLoading ? (
+              <div className="news-loading">
+                <div className="loading-spinner"></div>
+                <p>Loading related news...</p>
+              </div>
+            ) : dailySummary?.search_results?.length > 0 ? dailySummary.search_results.map((article, index) => (
+              <div key={index} className="news-article-card">
+                <div className="article-image">
+                  <img src={article.image_url} alt={article.title} />
+                </div>
+                <div className="article-content">
+                  <h4 className="article-title">
+                    <a href={article.url} target="_blank" rel="noopener noreferrer">
+                      {article.title}
+                    </a>
+                  </h4>
+                  <p className="article-snippet">{article.snippet}</p>
+                  <div className="article-meta">
+                    <span className="article-date">{formatDate(article.date)}</span>
+                  </div>
+                </div>
+              </div>
+            )) : (
+              <div className="no-articles">
+                <p>No related news articles available at the moment.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Chat Section - 1/4 width */}
+      <div className="claudia-chat-section">
+        <div className="claudia-chat-container">
+          {/* Messages */}
+          <div className="claudia-messages">
+            {isLoading && messages.length === 0 && (
+              <div className="claudia-welcome">
+                <div className="claudia-welcome-avatar">🤖</div>
+                <h2 className="claudia-welcome-title">{t.claudiaWelcome}</h2>
+                <p className="claudia-welcome-subtitle">{t.claudiaSubtitle}</p>
+                <div className="claudia-loading">
+                  <div className="claudia-avatar-large">🤖</div>
+                  <div>
+                    <p>{t.loadingClaudia}</p>
+                    <div className="claudia-loading-dots">
+                      <div className="claudia-loading-dot"></div>
+                      <div className="claudia-loading-dot"></div>
+                      <div className="claudia-loading-dot"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {error && (
+              <div className="claudia-error">
+                <p>{error}</p>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={loadInitialData}
+                  style={{ marginTop: '1rem' }}
+                >
+                  {t.tryAgain}
+                </button>
+              </div>
+            )}
+
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`claudia-message ${message.role}`}
+              >
+                <div className={`claudia-message-avatar ${message.role}`}>
+                  {message.role === 'assistant' ? '🤖' : '👤'}
+                </div>
+                <div className={`claudia-message-content ${message.role}`}>
+                  <p className="claudia-message-text">
+                    {message.role === 'assistant' && message.id === messages[0]?.id ? (
+                      <TypingAnimation 
+                        text={message.content} 
+                        speed={5}
+                        delay={500}
+                      />
+                    ) : (
+                      message.content
+                    )}
+                  </p>
+                  <div className="claudia-message-time">
+                    {formatTime(message.timestamp)}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {isTyping && (
+              <div className="claudia-message">
+                <div className="claudia-message-avatar assistant">🤖</div>
+                <div className="claudia-message-content assistant">
+                  <div className="claudia-loading">
+                    <div className="claudia-loading-dots">
+                      <div className="claudia-loading-dot"></div>
+                      <div className="claudia-loading-dot"></div>
+                      <div className="claudia-loading-dot"></div>
+                    </div>
+                    <span style={{ marginLeft: '1rem', color: '#666' }}>
+                      {t.claudiaTyping}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Suggestions Panel */}
+          {showSuggestions && (
+            <div className="suggestion-panel">
+              <div className="suggestion-title">{t.suggestionTitle}</div>
+              <div className="suggestion-chips">
+                <button
+                  type="button"
+                  className="suggestion-chip"
+                  onClick={() => handleSuggestionClick(t.suggestion1)}
+                  disabled={isLoading}
+                >
+                  {t.suggestion1}
+                </button>
+                <button
+                  type="button"
+                  className="suggestion-chip"
+                  onClick={() => handleSuggestionClick(t.suggestion2)}
+                  disabled={isLoading}
+                >
+                  {t.suggestion2}
+                </button>
+              </div>
+            </div>
+          )}
+          {/* Input */}
+          <div className="claudia-input-container">
+            <textarea
+              value={inputMessage}
+              onChange={(e) => setInputMessage(String(e.target.value || ''))}
+              onKeyPress={handleKeyPress}
+              placeholder={t.typeMessage}
+              className="claudia-input"
+              rows="1"
+              disabled={isLoading}
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={!inputMessage || typeof inputMessage !== 'string' || !inputMessage.trim() || isLoading}
+              className="claudia-send-button"
+            >
+              ➤
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Claudia;
