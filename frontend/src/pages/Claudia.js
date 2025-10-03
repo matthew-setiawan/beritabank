@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../translations/translations';
-import { updateUserDescription } from '../services/claudiaService';
+import { updateUserDescription, updateUserDescriptionWithContext } from '../services/claudiaService';
 import { getDailySummary } from '../services/dailySummaryService';
 import TypingAnimation from '../components/TypingAnimation';
 
@@ -17,6 +17,7 @@ const Claudia = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   // Daily summary states
   const [dailySummary, setDailySummary] = useState(null);
@@ -29,9 +30,31 @@ const Claudia = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Auto-resize textarea based on content
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 120; // Maximum height in pixels (about 5-6 lines)
+      
+      if (scrollHeight <= maxHeight) {
+        textarea.style.height = scrollHeight + 'px';
+        textarea.style.overflowY = 'hidden';
+      } else {
+        textarea.style.height = maxHeight + 'px';
+        textarea.style.overflowY = 'auto';
+      }
+    }
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [inputMessage]);
 
   useEffect(() => {
     // Load initial data when component mounts
@@ -115,7 +138,12 @@ const Claudia = () => {
     setError(null);
 
     try {
-      const response = await updateUserDescription(textToSend);
+      // Build context from previous messages (excluding the current user message)
+      const contextMessages = messages.filter(msg => msg.role !== 'user' || msg.id !== userMessage.id);
+      const contextString = buildContextString(contextMessages);
+      
+      // Send message with context
+      const response = await updateUserDescriptionWithContext(textToSend, contextString);
       
       if (response.success) {
         const assistantMessage = {
@@ -141,6 +169,18 @@ const Claudia = () => {
       setIsLoading(false);
       setIsTyping(false);
     }
+  };
+
+  // Build context string from previous messages
+  const buildContextString = (previousMessages) => {
+    if (previousMessages.length === 0) return '';
+    
+    const contextParts = previousMessages.map(msg => {
+      const role = msg.role === 'user' ? 'User' : 'Assistant';
+      return `${role}: ${msg.content}`;
+    });
+    
+    return `Previous messages for context: ${contextParts.join(' | ')}`;
   };
 
   const handleSuggestionClick = (text) => {
@@ -180,6 +220,19 @@ const Claudia = () => {
     }
   };
 
+  // Format text for summary and advice with bold text and newlines
+  const formatText = (text) => {
+    if (!text) return '';
+    
+    // Replace pipe characters with double newlines (paragraph spacing)
+    let formatted = text.replace(/\|/g, '\n\n');
+    
+    // Handle bold text formatting with red color
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #dc3545;">$1</strong>');
+    
+    return formatted;
+  };
+
   return (
     <div className="claudia-page-container">
       {/* Daily Summary Section - 3/4 width */}
@@ -203,7 +256,12 @@ const Claudia = () => {
                     <p>Loading daily summary...</p>
                   </div>
                 ) : (
-                  <p>{language === 'en' ? (dailySummary?.summary_en || dailySummary?.summary) : (dailySummary?.summary_id || dailySummary?.summary) || "No summary available"}</p>
+                  <div 
+                    dangerouslySetInnerHTML={{ 
+                      __html: formatText(language === 'en' ? (dailySummary?.summary_en || dailySummary?.summary) : (dailySummary?.summary_id || dailySummary?.summary) || "No summary available")
+                    }}
+                    style={{ whiteSpace: 'pre-line' }}
+                  />
                 )}
               </div>
               <div className="advice-paragraph">
@@ -214,7 +272,12 @@ const Claudia = () => {
                     <p>Loading advice...</p>
                   </div>
                 ) : (
-                  <p>{language === 'en' ? (dailySummary?.advice_en || dailySummary?.advice) : (dailySummary?.advice_id || dailySummary?.advice) || "No advice available"}</p>
+                  <div 
+                    dangerouslySetInnerHTML={{ 
+                      __html: formatText(language === 'en' ? (dailySummary?.advice_en || dailySummary?.advice) : (dailySummary?.advice_id || dailySummary?.advice) || "No advice available")
+                    }}
+                    style={{ whiteSpace: 'pre-line' }}
+                  />
                 )}
               </div>
             </div>
@@ -362,19 +425,37 @@ const Claudia = () => {
                 >
                   {t.suggestion2}
                 </button>
+                <button
+                  type="button"
+                  className="suggestion-chip"
+                  onClick={() => handleSuggestionClick(t.suggestion3)}
+                  disabled={isLoading}
+                >
+                  {t.suggestion3}
+                </button>
               </div>
             </div>
           )}
           {/* Input */}
           <div className="claudia-input-container">
             <textarea
+              ref={textareaRef}
               value={inputMessage}
-              onChange={(e) => setInputMessage(String(e.target.value || ''))}
+              onChange={(e) => {
+                setInputMessage(String(e.target.value || ''));
+                adjustTextareaHeight();
+              }}
               onKeyPress={handleKeyPress}
               placeholder={t.typeMessage}
               className="claudia-input"
               rows="1"
               disabled={isLoading}
+              style={{
+                resize: 'none',
+                overflow: 'hidden',
+                minHeight: '40px',
+                maxHeight: '120px'
+              }}
             />
             <button
               onClick={handleSendMessage}

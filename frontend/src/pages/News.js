@@ -47,6 +47,7 @@ const News = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -79,10 +80,26 @@ const News = () => {
     };
   };
 
+  // Filter articles by category
+  const filteredArticles = articles.filter(article => {
+    if (selectedCategory === 'all') return true;
+    return article.category && article.category.includes(selectedCategory);
+  });
+
   // Sort articles by importance and get the featured article
-  const sortedArticles = articles.sort((a, b) => b.importance - a.importance);
+  const sortedArticles = filteredArticles.sort((a, b) => b.importance - a.importance);
   const featuredArticle = sortedArticles[0];
   const otherArticles = sortedArticles.slice(1);
+
+  // Category filter options
+  const categories = [
+    { key: 'all', label: t.allNews, description: '' },
+    { key: 'ECO', label: t.categoryEcoDesc, description: '' },
+    { key: 'BNK', label: t.categoryBnkDesc, description: '' },
+    { key: 'FIN', label: t.categoryFinDesc, description: '' },
+    { key: 'MON', label: t.categoryMonDesc, description: '' },
+    { key: 'MRK', label: t.categoryMrkDesc, description: '' }
+  ];
 
   if (loading) {
     return (
@@ -125,6 +142,19 @@ const News = () => {
         <div className="container">
           <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>{t.financialNews}</h2>
           
+          {/* Category Filter Buttons */}
+          <div className="category-filters">
+            {categories.map(category => (
+              <button
+                key={category.key}
+                onClick={() => setSelectedCategory(category.key)}
+                className={`category-btn ${selectedCategory === category.key ? 'active' : ''}`}
+              >
+                {category.label}
+              </button>
+            ))}
+          </div>
+          
           {/* Featured Article - Headline Design */}
           {featuredArticle && (() => {
             const content = getContent(featuredArticle);
@@ -159,9 +189,19 @@ const News = () => {
             );
           })()}
 
+          {/* No articles message */}
+          {filteredArticles.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📰</div>
+              <h3>No articles found</h3>
+              <p>No articles available for the selected category.</p>
+            </div>
+          )}
+
           {/* Other Articles Grid */}
-          <div className="news-grid">
-            {otherArticles.map(article => {
+          {filteredArticles.length > 0 && (
+            <div className="news-grid">
+              {otherArticles.map(article => {
               const content = getContent(article);
               return (
                 <article key={article._id} className="news-card">
@@ -191,7 +231,8 @@ const News = () => {
                 </article>
               );
             })}
-          </div>
+            </div>
+          )}
         </div>
       </section>
     </div>

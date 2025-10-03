@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { translations } from '../translations/translations';
-import { registerUser } from '../services/authService';
+import { registerUser, loginUser, createUserDescription } from '../services/authService';
+import { API_BASE_URL } from '../config/api';
 import OnboardingFlow from '../components/OnboardingFlow';
+import EmailVerification from '../components/EmailVerification';
 
 const Register = () => {
   const { language } = useLanguage();
+  const { login } = useAuth();
   const t = translations[language];
   const navigate = useNavigate();
 
@@ -21,7 +25,9 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [userDescription, setUserDescription] = useState('');
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -79,14 +85,57 @@ const Register = () => {
       return;
     }
 
-    // Show onboarding flow after form validation
-    setShowOnboarding(true);
+    // Register user first
+    await handleRegistration();
   };
 
-  const handleOnboardingComplete = (description) => {
-    setUserDescription(description); // keep for persistence/UX
+  const handleOnboardingComplete = async (description) => {
+    setUserDescription(description);
     setShowOnboarding(false);
-    handleRegistration(description); // pass directly
+    
+    // Use the new create_desc endpoint and then login
+    await handleCreateDescriptionAndLogin(description);
+  };
+
+  const handleCreateDescriptionAndLogin = async (description) => {
+    setIsLoading(true);
+    setSuccessMessage('');
+
+    try {
+      // Get the token from registration response
+      const registrationToken = localStorage.getItem('registration_token');
+      
+      if (!registrationToken) {
+        throw new Error('No registration token found');
+      }
+
+      // Create the description using the registration token
+      await createUserDescription(description, registrationToken);
+
+      // Use AuthContext login function to properly update authentication state
+      login({
+        user_id: localStorage.getItem('user_id'),
+        username: formData.username,
+        email: formData.email,
+        token: registrationToken
+      });
+
+      // Clean up the temporary data
+      localStorage.removeItem('registration_token');
+      localStorage.removeItem('user_id');
+
+      setSuccessMessage(t.onboardingCompleteSuccess);
+      
+      // Redirect to Claudia page after successful onboarding
+      setTimeout(() => {
+        navigate('/claudia');
+      }, 2000);
+    } catch (error) {
+      console.error('Onboarding completion error:', error);
+      setErrors({ general: error.message || t.onboardingError });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRegistration = async (descParam) => {
@@ -94,29 +143,24 @@ const Register = () => {
     setSuccessMessage('');
 
     try {
-      
+      // Register user without description
       const response = await registerUser({
         username: formData.username.trim(),
         email: formData.email.trim(),
-        password: formData.password,
-        desc: descParam || userDescription // fallback to state if provided
+        password: formData.password
       });
 
       if (response.success) {
+        // Store the token and user data from registration response
+        localStorage.setItem('registration_token', response.data.token);
+        localStorage.setItem('user_id', response.data.user_id);
+        
         setSuccessMessage(t.registrationSuccess);
         
-        // Store user data in localStorage (you might want to use a more secure method)
-        localStorage.setItem('user', JSON.stringify({
-          user_id: response.data.user_id,
-          username: response.data.username,
-          email: response.data.email,
-          token: response.data.token
-        }));
-
-        // Redirect to home page after successful registration
+        // Show email verification after successful registration
         setTimeout(() => {
-          navigate('/');
-        }, 2000);
+          setShowEmailVerification(true);
+        }, 1500);
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -135,6 +179,28 @@ const Register = () => {
       setIsLoading(false);
     }
   };
+
+  // Show email verification if triggered
+  if (showEmailVerification) {
+    return (
+      <EmailVerification
+        email={formData.email}
+        token={localStorage.getItem('registration_token')}
+        onVerified={() => {
+          setShowEmailVerification(false);
+          // Show transition animation before onboarding
+          setTimeout(() => {
+            setIsTransitioning(true);
+          }, 500);
+          
+          // Show onboarding flow after transition animation
+          setTimeout(() => {
+            setShowOnboarding(true);
+          }, 2500);
+        }}
+      />
+    );
+  }
 
   // Show onboarding flow if triggered
   if (showOnboarding) {
@@ -258,18 +324,27 @@ const Register = () => {
             </div>
           )}
 
+          {/* Transition Animation */}
+          {isTransitioning && !showOnboarding && (
+            <div className="transition-animation">
+              <div className="claudia-avatar">🤖</div>
+              <h3 className="transition-title">Setting up your personalized experience...</h3>
+              <div className="loading-spinner"></div>
+              <p className="transition-subtitle">This will only take a moment</p>
+            </div>
+          )}
+
           {/* Submit Button */}
           <div className="registration-actions">
             <button
               type="submit"
-              className="btn btn-primary registration-btn"
-              disabled={isLoading}
+              className={`btn registration-btn ${isLoading || successMessage ? 'btn-disabled' : 'btn-primary'}`}
+              disabled={isLoading || successMessage}
             >
               {isLoading ? (
-                <>
-                  <span className="loading-spinner"></span>
-                  Creating Account...
-                </>
+                'Creating Account...'
+              ) : successMessage ? (
+                'Account Created!'
               ) : (
                 t.createAccountBtn
               )}

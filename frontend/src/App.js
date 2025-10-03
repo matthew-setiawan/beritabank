@@ -10,15 +10,42 @@ import BankCompare from './pages/BankCompare';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Claudia from './pages/Claudia';
+import ProfileCompletion from './components/ProfileCompletion';
 
 const HomeOrRedirect = () => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Claudia /> : <Home />;
+  const { isAuthenticated, userStatus, statusLoading } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Home />;
+  }
+  
+  if (statusLoading) {
+    return <ProfileCompletion />;
+  }
+  
+  if (userStatus && !userStatus.all_requirements_met) {
+    return <ProfileCompletion />;
+  }
+  
+  return <Claudia />;
 };
 
 const ProtectedClaudia = () => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Claudia /> : <Home />;
+  const { isAuthenticated, userStatus, statusLoading } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Home />;
+  }
+  
+  if (statusLoading) {
+    return <ProfileCompletion />;
+  }
+  
+  if (userStatus && !userStatus.all_requirements_met) {
+    return <ProfileCompletion />;
+  }
+  
+  return <Claudia />;
 };
 
 function App() {

@@ -41,6 +41,19 @@ export const translations = {
     unableToLoadNews: 'Unable to Load News',
     tryAgain: 'Try Again',
     
+    // News Categories
+    allNews: 'All',
+    categoryEco: 'ECO',
+    categoryBnk: 'BNK',
+    categoryFin: 'FIN',
+    categoryMon: 'MON',
+    categoryMrk: 'MRK',
+    categoryEcoDesc: 'Economy and Business',
+    categoryBnkDesc: 'Banking',
+    categoryFinDesc: 'Finance',
+    categoryMonDesc: 'Monetary and Fiscal',
+    categoryMrkDesc: 'Market Update',
+    
     // Article Detail Page
     backToNews: '← Back to News',
     readOriginalArticle: 'Read Original Article',
@@ -61,6 +74,7 @@ export const translations = {
     interestRate: 'Interest Rate',
     minimumDeposit: 'Minimum Deposit',
     tenure: 'Tenure',
+    risk: 'Risk',
     viewDetails: 'View Details',
     hideDetails: 'Hide Details',
     visitWebsite: 'Visit Website',
@@ -68,6 +82,20 @@ export const translations = {
     insurance: 'Insurance',
     fees: 'Fees',
     mo: 'mo',
+    
+    // Bank Compare Filters and Sorting
+    sortBy: 'Sort by',
+    sortByInterestRate: 'Interest Rate',
+    sortByRating: 'Rating',
+    sortByRisk: 'Risk',
+    sortOrderHighToLow: 'High to Low',
+    sortOrderLowToHigh: 'Low to High',
+    filterBy: 'Filter by',
+    filterAll: 'All',
+    filterOnline: 'Online',
+    filterBranch: 'Branch',
+    filterUmum: 'Commercial Bank',
+    filterBpr: 'BPR',
     
     // AI Assistant Modal
     loginRequired: 'Login Required',
@@ -100,21 +128,45 @@ export const translations = {
     loginToContinue: 'Login to continue to Claudia AI',
     signIn: 'Sign In',
     
+    // Email Verification
+    verifyEmailTitle: 'Verify Your Email',
+    verifyEmailSubtitle: 'We sent a 6-digit verification code to {email}',
+    verificationCodeLabel: 'Enter Verification Code',
+    verificationCodeInvalid: 'Please enter a valid 6-digit code',
+    verificationFailed: 'Verification failed. Please try again.',
+    emailVerifiedSuccess: 'Email verified successfully!',
+    verifying: 'Verifying...',
+    verifyEmail: 'Verify Email',
+    didntReceiveCode: "Didn't receive the code?",
+    resendIn: 'Resend code in {time}',
+    resendCode: 'Resend Code',
+    sending: 'Sending...',
+    verificationCodeSent: 'New verification code sent!',
+    resendFailed: 'Failed to resend code. Please try again.',
+    checkingProfile: 'Checking your profile...',
+    settingUpProfile: 'Setting up your profile...',
+    almostDone: 'Almost done!',
+    
     // Onboarding Questions
     welcomeToOnboarding: 'Welcome! Let\'s personalize your experience',
     onboardingIntro: 'I\'m Claudia, your AI financial assistant. To provide you with the most relevant news and insights, I\'d like to learn about your financial situation and interests.',
-    financialGoalsQuestion: 'What are your main financial goals right now?',
-    financialGoalsPlaceholder: 'e.g., saving for a house, investing for retirement, growing wealth, managing debt',
-    banksUsedQuestion: 'Which banks or platforms do you currently use?',
-    banksUsedPlaceholder: 'e.g., Bank Mandiri, BCA, GoPay, OVO, Stock trading apps',
-    currentInvestmentsQuestion: 'What are you currently investing in?',
-    currentInvestmentsPlaceholder: 'e.g., Stocks, ETFs, Bonds, Crypto, Real Estate, Mutual Funds',
-    specificAssetsQuestion: 'Are there specific assets, sectors, or topics you\'d like to follow?',
-    specificAssetsPlaceholder: 'e.g., Bitcoin, US banking, Tech stocks, Real estate markets, Indonesian economy',
-    newsTypeQuestion: 'What type of financial news matters most to you?',
-    newsTypePlaceholder: 'e.g., Market updates, Banking news, Global economy, Regulations, Personal finance',
-    newsRegionQuestion: 'Do you want news focused on your region, or global coverage?',
-    newsRegionPlaceholder: 'e.g., Indonesia only, Southeast Asia, Global coverage',
+    banksUsedQuestion: 'What bank are you currently depositing your money in?',
+    banksUsedPlaceholder: 'Search for your bank...',
+    banksUsedOther: 'Other (please specify)',
+    investmentTypesQuestion: 'What types of investments are you most interested in?',
+    investmentTypesPlaceholder: 'e.g. stocks, mutual funds, crypto, property',
+    riskToleranceQuestion: 'How do you usually approach investing?',
+    riskToleranceOptions: {
+      safe: 'I prefer safer, stable options',
+      moderate: 'I\'m open to some risk for higher returns',
+      aggressive: 'I like high-risk, high-reward opportunities'
+    },
+    newsPresentationQuestion: 'How would you like the news presented?',
+    newsPresentationOptions: {
+      simple: 'Simple and easy-to-understand',
+      technical: 'More technical with financial terms',
+      both: 'Both, depending on the topic'
+    },
     nextQuestion: 'Next',
     finishOnboarding: 'Finish Setup',
     skipQuestion: 'Skip',
@@ -132,6 +184,7 @@ export const translations = {
     suggestionTitle: 'Try asking:',
     suggestion1: 'How is bitcoin doing?',
     suggestion2: 'Update my preferences to also include bitcoin',
+    suggestion3: 'I\'m open to high risk if it means higher returns. Adjust my preferences.',
     
     // Daily Summary
     loadingSummary: 'Loading daily summary...',
@@ -182,6 +235,19 @@ export const translations = {
     unableToLoadNews: 'Tidak Dapat Memuat Berita',
     tryAgain: 'Coba Lagi',
     
+    // News Categories
+    allNews: 'Semua',
+    categoryEco: 'ECO',
+    categoryBnk: 'BNK',
+    categoryFin: 'FIN',
+    categoryMon: 'MON',
+    categoryMrk: 'MRK',
+    categoryEcoDesc: 'Ekonomi dan Bisnis',
+    categoryBnkDesc: 'Perbankan',
+    categoryFinDesc: 'Keuangan',
+    categoryMonDesc: 'Moneter dan Fiskal',
+    categoryMrkDesc: 'Update Pasar',
+    
     // Article Detail Page
     backToNews: '← Kembali ke Berita',
     readOriginalArticle: 'Baca Artikel Asli',
@@ -202,6 +268,7 @@ export const translations = {
     interestRate: 'Suku Bunga',
     minimumDeposit: 'Setoran Minimum',
     tenure: 'Jangka Waktu',
+    risk: 'Risiko',
     viewDetails: 'Lihat Detail',
     hideDetails: 'Sembunyikan Detail',
     visitWebsite: 'Kunjungi Website',
@@ -209,6 +276,20 @@ export const translations = {
     insurance: 'Asuransi',
     fees: 'Biaya',
     mo: 'bln',
+    
+    // Bank Compare Filters and Sorting
+    sortBy: 'Urutkan berdasarkan',
+    sortByInterestRate: 'Suku Bunga',
+    sortByRating: 'Rating',
+    sortByRisk: 'Risiko',
+    sortOrderHighToLow: 'Tinggi ke Rendah',
+    sortOrderLowToHigh: 'Rendah ke Tinggi',
+    filterBy: 'Filter berdasarkan',
+    filterAll: 'Semua',
+    filterOnline: 'Online',
+    filterBranch: 'Cabang',
+    filterUmum: 'Bank Umum',
+    filterBpr: 'BPR',
     
     // AI Assistant Modal
     loginRequired: 'Login Diperlukan',
@@ -241,21 +322,45 @@ export const translations = {
     loginToContinue: 'Masuk untuk melanjutkan ke Claudia AI',
     signIn: 'Masuk',
     
+    // Email Verification
+    verifyEmailTitle: 'Verifikasi Email Anda',
+    verifyEmailSubtitle: 'Kami mengirim kode verifikasi 6 digit ke {email}',
+    verificationCodeLabel: 'Masukkan Kode Verifikasi',
+    verificationCodeInvalid: 'Silakan masukkan kode 6 digit yang valid',
+    verificationFailed: 'Verifikasi gagal. Silakan coba lagi.',
+    emailVerifiedSuccess: 'Email berhasil diverifikasi!',
+    verifying: 'Memverifikasi...',
+    verifyEmail: 'Verifikasi Email',
+    didntReceiveCode: 'Tidak menerima kode?',
+    resendIn: 'Kirim ulang kode dalam {time}',
+    resendCode: 'Kirim Ulang Kode',
+    sending: 'Mengirim...',
+    verificationCodeSent: 'Kode verifikasi baru dikirim!',
+    resendFailed: 'Gagal mengirim ulang kode. Silakan coba lagi.',
+    checkingProfile: 'Memeriksa profil Anda...',
+    settingUpProfile: 'Menyiapkan profil Anda...',
+    almostDone: 'Hampir selesai!',
+    
     // Onboarding Questions
     welcomeToOnboarding: 'Selamat datang! Mari personalisasi pengalaman Anda',
     onboardingIntro: 'Saya Claudia, asisten keuangan AI Anda. Untuk memberikan berita dan wawasan yang paling relevan, saya ingin mempelajari situasi keuangan dan minat Anda.',
-    financialGoalsQuestion: 'Apa tujuan keuangan utama Anda saat ini?',
-    financialGoalsPlaceholder: 'contoh: menabung untuk rumah, investasi pensiun, menumbuhkan kekayaan, mengelola utang',
-    banksUsedQuestion: 'Bank atau platform apa yang saat ini Anda gunakan?',
-    banksUsedPlaceholder: 'contoh: Bank Mandiri, BCA, GoPay, OVO, aplikasi trading saham',
-    currentInvestmentsQuestion: 'Apa yang sedang Anda investasikan saat ini?',
-    currentInvestmentsPlaceholder: 'contoh: Saham, ETF, Obligasi, Crypto, Real Estate, Reksadana',
-    specificAssetsQuestion: 'Apakah ada aset, sektor, atau topik spesifik yang ingin Anda ikuti?',
-    specificAssetsPlaceholder: 'contoh: Bitcoin, perbankan AS, saham teknologi, pasar real estate, ekonomi Indonesia',
-    newsTypeQuestion: 'Jenis berita keuangan apa yang paling penting bagi Anda?',
-    newsTypePlaceholder: 'contoh: Update pasar, berita perbankan, ekonomi global, regulasi, keuangan pribadi',
-    newsRegionQuestion: 'Apakah Anda ingin berita fokus pada wilayah Anda, atau cakupan global?',
-    newsRegionPlaceholder: 'contoh: Indonesia saja, Asia Tenggara, cakupan global',
+    banksUsedQuestion: 'Bank mana yang saat ini Anda gunakan untuk menyimpan uang?',
+    banksUsedPlaceholder: 'Cari bank Anda...',
+    banksUsedOther: 'Lainnya (silahkan sebutkan)',
+    investmentTypesQuestion: 'Jenis investasi apa yang paling Anda minati?',
+    investmentTypesPlaceholder: 'contoh: saham, reksadana, crypto, properti',
+    riskToleranceQuestion: 'Bagaimana Anda biasanya mendekati investasi?',
+    riskToleranceOptions: {
+      safe: 'Saya lebih suka opsi yang aman dan stabil',
+      moderate: 'Saya terbuka dengan risiko untuk pengembalian yang lebih tinggi',
+      aggressive: 'Saya suka peluang berisiko tinggi dengan imbalan tinggi'
+    },
+    newsPresentationQuestion: 'Bagaimana Anda ingin berita disajikan?',
+    newsPresentationOptions: {
+      simple: 'Sederhana dan mudah dipahami',
+      technical: 'Lebih teknis dengan istilah keuangan',
+      both: 'Keduanya, tergantung topiknya'
+    },
     nextQuestion: 'Selanjutnya',
     finishOnboarding: 'Selesaikan Setup',
     skipQuestion: 'Lewati',
@@ -273,6 +378,7 @@ export const translations = {
     suggestionTitle: 'Coba tanyakan:',
     suggestion1: 'Bagaimana kabar Bitcoin?',
     suggestion2: 'Perbarui preferensi saya untuk juga menyertakan Bitcoin',
+    suggestion3: 'Saya terbuka dengan risiko tinggi jika berarti return lebih tinggi. Sesuaikan preferensi saya.',
     
     // Daily Summary
     loadingSummary: 'Memuat ringkasan harian...',
