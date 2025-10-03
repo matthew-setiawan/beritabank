@@ -185,19 +185,35 @@ def register():
         if not username or not email or not password:
             return jsonify({'success': False, 'error': 'Username, email, and password are required'}), 400
         
-        if len(password) < 6:
-            return jsonify({'success': False, 'error': 'Password must be at least 6 characters long'}), 400
+        # Password validation - 8+ characters, must contain letters, numbers, and special characters
+        if len(password) < 8:
+            return jsonify({'success': False, 'error': 'Password must be at least 8 characters long'}), 400
         
-        # Check if user already exists
-        existing_user = user_collection.find_one({
-            '$or': [
-                {'username': username},
-                {'email': email}
-            ]
-        })
+        # Check for at least one letter
+        has_letter = any(c.isalpha() for c in password)
+        if not has_letter:
+            return jsonify({'success': False, 'error': 'Password must contain at least one letter'}), 400
         
-        if existing_user:
-            return jsonify({'success': False, 'error': 'Username or email already exists'}), 409
+        # Check for at least one number
+        has_number = any(c.isdigit() for c in password)
+        if not has_number:
+            return jsonify({'success': False, 'error': 'Password must contain at least one number'}), 400
+        
+        # Check for at least one special character
+        special_chars = "!@#$%^&*()_+-=[]{}|;:,.<>?"
+        has_special = any(c in special_chars for c in password)
+        if not has_special:
+            return jsonify({'success': False, 'error': 'Password must contain at least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)'}), 400
+        
+        # Check if username already exists
+        existing_username = user_collection.find_one({'username': username})
+        if existing_username:
+            return jsonify({'success': False, 'error': 'Username already exists'}), 409
+        
+        # Check if email already exists
+        existing_email = user_collection.find_one({'email': email})
+        if existing_email:
+            return jsonify({'success': False, 'error': 'Email already exists'}), 409
         
         # Hash password
         password_hash, salt = hash_password(password)
@@ -233,6 +249,26 @@ def register():
                 print(f"Warning: Could not generate daily summary for new user: {e}")
                 # Continue with registration even if daily summary fails
         
+        # Send verification email and get encrypted code
+        from utils.email_utils import send_verification_code, encrypt_code
+        verification_result = send_verification_code(email, username)
+        
+        if not verification_result['success']:
+            return jsonify({
+                'success': False,
+                'error': f'Failed to send verification email: {verification_result["error"]}'
+            }), 500
+        
+        # Encrypt the verification code
+        verification_code = verification_result['verification_code']
+        encrypt_result = encrypt_code(verification_code)
+        
+        if not encrypt_result['success']:
+            return jsonify({
+                'success': False,
+                'error': f'Failed to encrypt verification code: {encrypt_result["error"]}'
+            }), 500
+        
         # Create user document
         user_doc = {
             'username': username,
@@ -243,6 +279,9 @@ def register():
             'desc': desc,
             'chat_history': [],  # Initialize empty chat history
             'daily_summary': daily_summary,  # Add daily summary
+            'is_verified': False,  # Email verification status
+            'verification_code': encrypt_result['encrypted_code'],  # Encrypted verification code
+            'verification_attempts': 0,  # Track verification attempts
             'created_at': datetime.now().isoformat(),
             'last_login': None
         }
@@ -332,6 +371,337 @@ def login():
     except Exception as e:
         return jsonify({'success': False, 'error': f'Login failed: {str(e)}'}), 500
 
+@app.route('/api/auth/create_desc', methods=['POST'])
+@require_auth(user_collection)
+def create_desc():
+    """
+    Create/update user's description and generate daily summary
+    
+    Headers:
+        Authorization: Bearer <token>
+    
+    Expected JSON:
+    {
+        "desc": "string" (user description/interests)
+    }
+    """
+    try:
+        user = request.current_user
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': 'No JSON data provided'}), 400
+        
+        desc = data.get('desc', '').strip()
+        
+        if not desc:
+            return jsonify({'success': False, 'error': 'Description is required'}), 400
+        
+        # Generate daily summary for the user
+        daily_summary = {
+            'last_updated': datetime.now().isoformat(),
+            'summary_en': '',
+            'summary_id': '',
+            'advice_en': '',
+            'advice_id': '',
+            'search_results': []
+        }
+        
+        # Generate daily summary based on description
+        try:
+            from models.daily_summarizer import generate_daily_summary
+            summary_result = generate_daily_summary(desc)
+            
+            if summary_result.get('success'):
+                daily_summary.update({
+                    'summary_en': summary_result.get('summary_en', ''),
+                    'summary_id': summary_result.get('summary_id', ''),
+                    'advice_en': summary_result.get('advice_en', ''),
+                    'advice_id': summary_result.get('advice_id', ''),
+                    'search_results': summary_result.get('search_results', [])
+                })
+        except Exception as e:
+            print(f"Warning: Could not generate daily summary: {e}")
+            # Continue even if daily summary fails
+        
+        # Update user's description and daily summary in database
+        user_collection.update_one(
+            {'_id': user['_id']},
+            {
+                '$set': {
+                    'desc': desc,
+                    'daily_summary': daily_summary
+                }
+            }
+        )
+        
+        return jsonify({
+            'success': True,
+            'message': 'Description created successfully',
+            'data': {
+                'desc': desc,
+                'daily_summary': daily_summary
+            }
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to create description: {str(e)}'}), 500
+
+@app.route('/api/auth/regenerate_verification_code', methods=['POST'])
+@require_auth(user_collection)
+def regenerate_verification_code():
+    """
+    Regenerate and send a new verification code to user's email
+    
+    Headers:
+        Authorization: Bearer <token>
+    """
+    try:
+        user = request.current_user
+        
+        # Check if current verification code is still valid (not expired)
+        from utils.email_utils import decrypt_code
+        current_code = user.get('verification_code', '')
+        
+        if current_code:
+            # Try to decrypt the current code to check if it's still valid
+            # We'll use a dummy code to check expiry without affecting attempts
+            decrypt_result = decrypt_code(current_code, "000000")  # Dummy code to check expiry
+            
+            # If the code is not expired and not invalid format, don't regenerate
+            if (decrypt_result.get('success') or 
+                (not decrypt_result.get('success') and 
+                 decrypt_result.get('error') == 'Verification code does not match' and 
+                 not decrypt_result.get('is_expired', True))):
+                
+                # Get the actual expiry time from the decrypted data
+                try:
+                    import json
+                    import base64
+                    from cryptography.fernet import Fernet
+                    import os
+                    
+                    encryption_key = os.getenv('ENCRYPTION_KEY')
+                    if encryption_key:
+                        f = Fernet(encryption_key.encode())
+                        encrypted_data = base64.b64decode(current_code.encode())
+                        decrypted_data = f.decrypt(encrypted_data)
+                        data = json.loads(decrypted_data.decode())
+                        
+                        from datetime import datetime
+                        expiry_time = datetime.fromisoformat(data['expiry'])
+                        current_time = datetime.now()
+                        
+                        if current_time < expiry_time:
+                            time_remaining = expiry_time - current_time
+                            minutes_remaining = int(time_remaining.total_seconds() / 60)
+                            
+                            return jsonify({
+                                'success': False,
+                                'error': f'Current verification code is still valid. Please wait {minutes_remaining} minutes before requesting a new code.',
+                                'code_still_valid': True,
+                                'minutes_remaining': minutes_remaining
+                            }), 429  # Too Many Requests
+                except Exception:
+                    # If we can't decrypt, proceed with regeneration
+                    pass
+        
+        # Send new verification email
+        from utils.email_utils import send_verification_code, encrypt_code
+        verification_result = send_verification_code(user['email'], user['username'])
+        
+        if not verification_result['success']:
+            return jsonify({
+                'success': False,
+                'error': f'Failed to send verification email: {verification_result["error"]}'
+            }), 500
+        
+        # Encrypt the new verification code
+        verification_code = verification_result['verification_code']
+        encrypt_result = encrypt_code(verification_code)
+        
+        if not encrypt_result['success']:
+            return jsonify({
+                'success': False,
+                'error': f'Failed to encrypt verification code: {encrypt_result["error"]}'
+            }), 500
+        
+        # Update user's verification code in database
+        user_collection.update_one(
+            {'_id': user['_id']},
+            {
+                '$set': {
+                    'verification_code': encrypt_result['encrypted_code'],
+                    'is_verified': False,  # Reset verification status
+                    'verification_attempts': 0  # Reset attempts counter
+                }
+            }
+        )
+        
+        return jsonify({
+            'success': True,
+            'message': 'New verification code sent to your email',
+            'data': {
+                'email': user['email'],
+                'expires_in': '10 minutes'
+            }
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to regenerate verification code: {str(e)}'}), 500
+
+@app.route('/api/auth/verify_email', methods=['POST'])
+@require_auth(user_collection)
+def verify_email():
+    """
+    Verify user's email with the provided verification code
+    
+    Headers:
+        Authorization: Bearer <token>
+    
+    Expected JSON:
+    {
+        "code": "string" (6-digit verification code)
+    }
+    """
+    try:
+        user = request.current_user
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': 'No JSON data provided'}), 400
+        
+        provided_code = data.get('code', '').strip()
+        
+        if not provided_code:
+            return jsonify({'success': False, 'error': 'Verification code is required'}), 400
+        
+        if len(provided_code) != 6 or not provided_code.isdigit():
+            return jsonify({'success': False, 'error': 'Verification code must be 6 digits'}), 400
+        
+        # Check if user has exceeded verification attempts
+        current_attempts = user.get('verification_attempts', 0)
+        if current_attempts >= 3:
+            return jsonify({
+                'success': False,
+                'error': 'Too many verification attempts. Please wait to resend verification code.',
+                'attempts_exceeded': True,
+                'attempts_remaining': 0
+            }), 429  # Too Many Requests
+        
+        # Decrypt and verify the code
+        from utils.email_utils import decrypt_code
+        decrypt_result = decrypt_code(user['verification_code'], provided_code)
+        
+        if not decrypt_result['success']:
+            # Increment verification attempts
+            new_attempts = current_attempts + 1
+            attempts_remaining = 3 - new_attempts
+            
+            user_collection.update_one(
+                {'_id': user['_id']},
+                {'$set': {'verification_attempts': new_attempts}}
+            )
+            
+            error_message = decrypt_result['error']
+            if attempts_remaining > 0:
+                error_message += f" {attempts_remaining} verification attempts left."
+            else:
+                error_message += " Please wait to resend verification code."
+            
+            return jsonify({
+                'success': False,
+                'error': error_message,
+                'is_expired': decrypt_result.get('is_expired', False),
+                'is_valid': decrypt_result.get('is_valid', False),
+                'attempts_remaining': attempts_remaining,
+                'attempts_exceeded': attempts_remaining == 0
+            }), 400
+        
+        # Code is valid, update user's verification status and reset attempts
+        user_collection.update_one(
+            {'_id': user['_id']},
+            {
+                '$set': {
+                    'is_verified': True,
+                    'verification_attempts': 0  # Reset attempts on successful verification
+                }
+            }
+        )
+        
+        return jsonify({
+            'success': True,
+            'message': 'Email verified successfully',
+            'data': {
+                'is_verified': True,
+                'minutes_remaining': decrypt_result.get('minutes_remaining', 0)
+            }
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to verify email: {str(e)}'}), 500
+
+@app.route('/api/auth/check_status', methods=['GET'])
+@require_auth(user_collection)
+def check_user_status():
+    """
+    Check user verification status and description completeness
+    
+    Headers:
+        Authorization: Bearer <token>
+    
+    Returns:
+        JSON with verification status and missing requirements
+    """
+    try:
+        user = request.current_user
+        
+        # Check if user is verified
+        is_verified = user.get('is_verified', False)
+        
+        # Check if user description is provided (not empty)
+        user_desc = user.get('desc', '')
+        has_description = bool(user_desc and user_desc.strip())
+        
+        # Determine what's missing
+        missing_requirements = []
+        
+        if not is_verified:
+            missing_requirements.append('email_verification')
+        
+        if not has_description:
+            missing_requirements.append('user_description')
+        
+        # Determine overall status
+        all_requirements_met = len(missing_requirements) == 0
+        
+        # Prepare response data
+        response_data = {
+            'is_verified': is_verified,
+            'has_description': has_description,
+            'all_requirements_met': all_requirements_met,
+            'missing_requirements': missing_requirements
+        }
+        
+        # Add specific guidance based on what's missing
+        if not is_verified and not has_description:
+            response_data['guidance'] = 'Please verify your email and add a description to complete your profile.'
+        elif not is_verified:
+            response_data['guidance'] = 'Please verify your email to complete your profile.'
+        elif not has_description:
+            response_data['guidance'] = 'Please add a description to complete your profile.'
+        else:
+            response_data['guidance'] = 'Your profile is complete!'
+        
+        return jsonify({
+            'success': all_requirements_met,
+            'message': 'Profile status checked successfully',
+            'data': response_data
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to check user status: {str(e)}'}), 500
+
 @app.route('/api/auth/me', methods=['GET'])
 @require_auth(user_collection)
 def get_current_user():
@@ -348,6 +718,8 @@ def get_current_user():
                 'username': user['username'],
                 'email': user['email'],
                 'desc': user.get('desc', ''),
+                'is_verified': user.get('is_verified', False),
+                'verification_attempts': user.get('verification_attempts', 0),
                 'created_at': user['created_at'],
                 'last_login': user.get('last_login')
             }

@@ -7,21 +7,19 @@ from datetime import datetime
 # Load environment variables
 load_dotenv()
 
-def get_infobank_news(directory=None):
+def get_detik_news(directory=None):
     """
-    Scrape headlines from InfoBank website
+    Scrape headlines from DetikFinance website
     Args:
-        directory (str, optional): Directory path to append to base URL (e.g., "/category/berita-ekonomi-dan-bisnis-terbaru/")
+        directory (str, optional): Directory path to append to base URL (e.g., "/ekonomi-bisnis/")
     Returns a list of dictionaries containing headline information
     """
     # Get URL from environment variable
-    base_url = os.getenv('infobank_url')
+    base_url = os.getenv('detikfinance_url')
     
     if not base_url:
-        return {
-            'error': 'infobank_url not found in environment variables',
-            'headlines': []
-        }
+        # Use default URL for testing if environment variable is not set
+        base_url = 'https://finance.detik.com'
     
     # Construct the full URL
     if directory:
@@ -49,14 +47,16 @@ def get_infobank_news(directory=None):
             
             headlines = []
             
-            # Look for common headline selectors
-            # Try different selectors that might contain headlines
+            # Look for common headline selectors specific to DetikFinance
             headline_selectors = [
                 'h1', 'h2', 'h3',  # Common heading tags
                 '.title', '.headline', '.news-title',  # Common class names
-                'a[href*="news"]',  # Links that might contain news
+                'a[href*="finance"]',  # Links that might contain finance news
                 '.post-title', '.article-title',  # Article title classes
-                '.entry-title', '.content-title'  # Content title classes
+                '.entry-title', '.content-title',  # Content title classes
+                '.media__title', '.media__link',  # DetikFinance specific selectors
+                '.list__title', '.list__link',  # List title selectors
+                'a[href*="detik.com"]'  # DetikFinance links
             ]
             
             for selector in headline_selectors:
@@ -73,12 +73,15 @@ def get_infobank_news(directory=None):
                         
                         # Make link absolute if it's relative
                         if link and not link.startswith('http'):
-                            link = url + link if link.startswith('/') else url + '/' + link
+                            if link.startswith('/'):
+                                link = 'https://finance.detik.com' + link
+                            else:
+                                link = 'https://finance.detik.com/' + link
                         
                         headline_data = {
                             'title': text,
                             'link': link,
-                            'source': 'InfoBank'
+                            'source': 'DetikFinance'
                         }
                         
                         # Avoid duplicates
@@ -86,13 +89,13 @@ def get_infobank_news(directory=None):
                             headlines.append(headline_data)
             
             # Limit to first 50 headlines to avoid too much data
-            headlines = headlines[:50]
+            headlines = headlines[:10]
             
             return {
                 'success': True,
                 'headlines': headlines,
                 'count': len(headlines),
-                'source': 'InfoBank',
+                'source': 'DetikFinance',
                 'url_scraped': url,
                 'directory_used': directory,
                 'scraped_at': datetime.now().isoformat()
@@ -118,25 +121,25 @@ if __name__ == "__main__":
     import json
     from datetime import datetime
     
-    print("🔍 Scraping InfoBank news...")
+    print("🔍 Scraping DetikFinance news...")
     print("=" * 50)
     
-    # Test with specific category directory
-    directory = "/category/berita-ekonomi-dan-bisnis-terbaru/"  # Scrape economics and business news
+    # Test with main page (no directory)
+    directory = None  # Scrape main DetikFinance page
     
     # Get the news data
-    result = get_infobank_news(directory=directory)
+    result = get_detik_news(directory=directory)
     
     # Add timestamp and metadata
     output_data = {
         'timestamp': datetime.now().isoformat(),
-        'scraper': 'InfoBank Scraper',
+        'scraper': 'DetikFinance Scraper',
         'status': 'success' if result.get('success') else 'error',
         'data': result
     }
     
     # Save to JSON file
-    output_file = 'infobank_scraper_result.json'
+    output_file = 'detik_scraper_result.json'
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=2, ensure_ascii=False, default=str)
     

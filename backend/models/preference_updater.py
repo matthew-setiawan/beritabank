@@ -6,12 +6,12 @@ from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
-    from utils.gemini_utils import call_gemini
+    from utils.perplexity_utils import call_perplexity_chat
 except ImportError:
     try:
-        from gemini_utils import call_gemini
+        from perplexity_utils import call_perplexity_chat
     except ImportError:
-        print("Error: Could not import call_gemini")
+        print("Error: Could not import call_perplexity_chat")
         sys.exit(1)
 
 load_dotenv()
@@ -57,28 +57,29 @@ def update_user_preferences(user_desc: str, message: str) -> dict:
         - Do not include any explanation outside the JSON.
         """
         
-        # Call Gemini to process the preference update
-        gemini_response = call_gemini(
+        # Call Perplexity to process the preference update
+        perplexity_response = call_perplexity_chat(
             prompt=prompt,
-            model="gemini-1.5-pro",
+            model="sonar-pro",
+            max_tokens=1000,
             temperature=0.3
         )
         
-        # Handle different return formats from call_gemini
-        if isinstance(gemini_response, str):
-            content = gemini_response
-        elif isinstance(gemini_response, dict):
-            if not gemini_response.get('success'):
-                return {
-                    'success': False,
-                    'error': f"Gemini API error: {gemini_response.get('error', 'Unknown error')}"
-                }
-            content = gemini_response.get('content', '')
-        else:
+        # Handle response from call_perplexity_chat
+        if not perplexity_response:
             return {
                 'success': False,
-                'error': f"Unexpected response format from Gemini: {type(gemini_response)}"
+                'error': "Perplexity API returned no response"
             }
+        
+        # Check if there's an error in the response
+        if 'error' in perplexity_response:
+            return {
+                'success': False,
+                'error': f"Perplexity API error: {perplexity_response.get('error', 'Unknown error')}"
+            }
+        
+        content = perplexity_response.get('content', '')
         
         # Try to parse the JSON from the content
         try:

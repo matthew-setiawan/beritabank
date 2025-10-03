@@ -1,0 +1,265 @@
+{
+  "timestamp": "2025-10-02T13:28:50.674363",
+  "scraper": "Kontan Scraper",
+  "status": "success",
+  "data": {
+    "success": true,
+    "headlines": [
+      {
+        "title": "Tok! DPR Sahkan RUU BUMN Jadi UU, Ini 12 Poinnya!",
+        "link": "https://nasional.kontan.co.id/news/tok-dpr-sahkan-ruu-bumn-jadi-uu-ini-12-poinnya",
+        "source": "Kontan"
+      },
+      {
+        "title": "APSyFI Ungkap Utilisasi TPT Nasional di Bawah 50%",
+        "link": "https://industri.kontan.co.id/news/apsyfi-ungkap-utilisasi-tpt-nasional-di-bawah-50",
+        "source": "Kontan"
+      },
+      {
+        "title": "IHSG Naik 0,36% ke 8.072 pada Sesi I Kamis (2/10), Top Gainers: MBMA, AMRT, ADMR",
+        "link": "https://investasi.kontan.co.id/news/ihsg-naik-036-ke-8072-pada-sesi-i-kamis-210-top-gainers-mbma-amrt-admr",
+        "source": "Kontan"
+      },
+      {
+        "title": "Google: Hacker Kirim Email Pemerasan ke Sejumlah Eksekutif, Klaim Curi Data Oracle",
+        "link": "https://internasional.kontan.co.id/news/google-hacker-kirim-email-pemerasan-ke-sejumlah-eksekutif-klaim-curi-data-oracle",
+        "source": "Kontan"
+      },
+      {
+        "title": "GLOBAL MARKETS-Stocks Mixed, Gold Hits Record as US Government Shuts Down",
+        "link": "https://english.kontan.co.id/news/global-markets-stocks-mixed-gold-hits-record-as-us-government-shuts-down",
+        "source": "Kontan"
+      },
+      {
+        "title": "Usai Udang, Kini Ekspor Cengkeh RI Juga Terkontaminasi Radioaktif! AS Blokir Impor",
+        "link": "https://tv.kontan.co.id/video/9fFIY6IFkzs",
+        "source": "Kontan"
+      },
+      {
+        "title": "AAJI Optimistis Pendapatan Premi dari Produk Tradisional Terus Tumbuh",
+        "link": "https://keuangan.kontan.co.id/news/aaji-optimistis-pendapatan-premi-dari-produk-tradisional-terus-tumbuh",
+        "source": "Kontan"
+      },
+      {
+        "title": "Cara Mudah Siapkan Pendapatan Bulanan Pensiun ala Astra Life",
+        "link": "https://momsmoney.kontan.co.id/news/cara-mudah-siapkan-pendapatan-bulanan-pensiun-ala-astra-life",
+        "source": "Kontan"
+      },
+      {
+        "title": "Kesalahan Investasi US$2 Miliar Buffett: Pelajaran Memilih Partner",
+        "link": "https://sosok.kontan.co.id/news/kesalahan-investasi-us2-miliar-buffett-pelajaran-memilih-partner-1",
+        "source": "Kontan"
+      },
+      {
+        "title": "Berharap Keajaiban Siklus Cuan Uptober di Pasar Kripto yang Kerap Membagikan Cuan",
+        "link": "https://insight.kontan.co.id/news/berharap-keajaiban-siklus-cuan-uptober-di-pasar-kripto-yang-kerap-membagikan-cuan",
+        "source": "Kontan"
+      },
+      {
+        "title": "Microsoft Ungkap 10 Profesi yang Berisiko Digantikan AI",
+        "link": "https://internasional.kontan.co.id/news/microsoft-ungkap-10-profesi-yang-berisiko-digantikan-ai",
+        "source": "Kontan"
+      },
+      {
+        "title": "Banjir Realokasi Pabrik Digital dari Tiongkok, Kemenperin Ungkap Tantangan Pajaknya",
+        "link": "https://nasional.kontan.co.id/news/banjir-realokasi-pabrik-digital-dari-tiongkok-kemenperin-ungkap-tantangan-pajaknya",
+        "source": "Kontan"
+      },
+      {
+        "title": "Geothermal Tawarkan Energi Stabil dan Peluang Ekonomi, Ini Penjelasannya",
+        "link": "https://industri.kontan.co.id/news/geothermal-tawarkan-energi-stabil-dan-peluang-ekonomi-ini-penjelasannya",
+        "source": "Kontan"
+      },
+      {
+        "title": "Presdir Freeport Sebut Pencarian Lima Pekerja Terjebak Longsor Masih Berjalan",
+        "link": "https://nasional.kontan.co.id/news/presdir-freeport-sebut-pencarian-lima-pekerja-terjebak-longsor-masih-berjalan",
+        "source": "Kontan"
+      },
+      {
+        "title": "Usai Udang, Kini Ekspor Cengkeh RI Juga Terkontaminasi Radioaktif! AS Blokir Impor",
+        "link": "https://www.kontan.co.id//tv.kontan.co.id/video/9fFIY6IFkzs",
+        "source": "Kontan"
+      },
+      {
+        "title": "Peredaran Elpiji Oplosan Masih Marak, Pertamina Ujicoba Seal Cap di Kemasan 50 Kg",
+        "link": "https://www.kontan.co.id//tv.kontan.co.id/video/yVoXP83lbgA",
+        "source": "Kontan"
+      },
+      {
+        "title": "46 Taipan Borong Patriot Bond Danantara, Mulai Salim Hingga Tahir",
+        "link": "https://www.kontan.co.id//tv.kontan.co.id/video/ZuDk42mWNMM",
+        "source": "Kontan"
+      },
+      {
+        "title": "Harga Emas Antam Menipis Hari Ini (2 Oktober 2025)",
+        "link": "https://www.kontan.co.id//tv.kontan.co.id/video/c2QnGa4iYTo",
+        "source": "Kontan"
+      },
+      {
+        "title": "Penjualan Pertalite Turun 5,10%, Anggaran Kompensasi Hemat Rp 12,6 Triliun",
+        "link": "https://www.kontan.co.id//tv.kontan.co.id/video/soiCKk7JzxI",
+        "source": "Kontan"
+      },
+      {
+        "title": "Pertamina Impor BBM, Vivo & BP-AKR Batal Beli! Ini Alasannya",
+        "link": "https://www.kontan.co.id//tv.kontan.co.id/video/pijY86O2xpA",
+        "source": "Kontan"
+      },
+      {
+        "title": "Tips Memaksimalkan Harga Jual Emas Perhiasan",
+        "link": "https://momsmoney.kontan.co.id/news/tips-memaksimalkan-harga-jual-emas-perhiasan",
+        "source": "Kontan"
+      },
+      {
+        "title": "Rupiah Menguat ke Rp 16.610 per Dolar AS pada Kamis (2/10) Siang",
+        "link": "https://investasi.kontan.co.id/news/rupiah-menguat-ke-rp-16610-per-dolar-as-pada-kamis-210-siang",
+        "source": "Kontan"
+      },
+      {
+        "title": "Kemenperin Ungkap Pemungutan Pajak Digital di Indonesia Masih Tidak Adil",
+        "link": "https://nasional.kontan.co.id/news/kemenperin-ungkap-pemungutan-pajak-digital-di-indonesia-masih-tidak-adil",
+        "source": "Kontan"
+      },
+      {
+        "title": "Insentif PPN DTP Diperpanjang, Harga Emiten Properti Milik Aguan (PANI) Menggeliat",
+        "link": "https://insight.kontan.co.id/news/insentif-ppn-dtp-diperpanjang-harga-emiten-properti-milik-aguan-pani-menggeliat",
+        "source": "Kontan"
+      },
+      {
+        "title": "Asa Taipan Dato Sri Tahir Injakkan Kaki di Gaza Hingga Perluas Bisnis Rumah Sakit",
+        "link": "https://insight.kontan.co.id/news/asa-taipan-dato-sri-tahir-injakkan-kaki-di-gaza-hingga-perluas-bisnis-rumah-sakit",
+        "source": "Kontan"
+      },
+      {
+        "title": "Wakil Kepala BKPM Sebut Investor Asing Ogah Masuk RI Karena Proses Perizinan Lambat",
+        "link": "https://nasional.kontan.co.id/news/wakil-kepala-bkpm-sebut-investor-asing-ogah-masuk-ri-karena-proses-perizinan-lambat",
+        "source": "Kontan"
+      },
+      {
+        "title": "KPK Tetapkan Staf Ahli Mensos Edi Suharto Sebagai Tersangka Korupsi Penyaluran Bansos",
+        "link": "https://nasional.kontan.co.id/news/kpk-tetapkan-staf-ahli-mensos-edi-suharto-sebagai-tersangka-korupsi-penyaluran-bansos",
+        "source": "Kontan"
+      },
+      {
+        "title": "Modern (MDRN) dan Genertec Jalin Kerjasama di Bidang Industri, Kesehatan dan Energi",
+        "link": "https://investasi.kontan.co.id/news/modern-mdrn-dan-genertec-jalin-kerjasama-di-bidang-industri-kesehatan-dan-energi",
+        "source": "Kontan"
+      },
+      {
+        "title": "Program MBG: Janji Makan Bergizi, Keracunan Reality",
+        "link": "https://www.kontan.co.id//fokus.kontan.co.id/news/program-mbg-janji-makan-bergizi-keracunan-reality",
+        "source": "Kontan"
+      },
+      {
+        "title": "Gejolak Politik Tekan Rupiah dan IHSG, Dunia Usaha Minta Stabilitas",
+        "link": "https://www.kontan.co.id//fokus.kontan.co.id/news/gejolak-politik-tekan-rupiah-dan-ihsg-dunia-usaha-minta-stabilitas",
+        "source": "Kontan"
+      },
+      {
+        "title": "Disokong Emiten Konglomerasi, Bisakah IHSG Kembali Tembus Level 8.000?",
+        "link": "https://www.kontan.co.id//fokus.kontan.co.id/news/disokong-emiten-konglomerasi-bisakah-ihsg-kembali-tembus-level-8000",
+        "source": "Kontan"
+      },
+      {
+        "title": "JP Morgan, Blackrock, Hingga Vanguard Ramai-Ramai Tambah Kepemilikan Saham BRI",
+        "link": "https://keuangan.kontan.co.id/news/jp-morgan-blackrock-hingga-vanguard-ramai-ramai-tambah-kepemilikan-saham-bri",
+        "source": "Kontan"
+      },
+      {
+        "title": "Arsjad Rasjid Dirikan Sriwijaya Capital, Launching di Singapura! Kelola US$ 200 Juta",
+        "link": "https://industri.kontan.co.id/news/arsjad-rasjid-dirikan-sriwijaya-capital-launching-di-singapura-kelola-us-200-juta",
+        "source": "Kontan"
+      },
+      {
+        "title": "SPBU VIVO Batal Beli BBM ke Pertamina, Ini Penyebabnya",
+        "link": "https://industri.kontan.co.id/news/spbu-vivo-batal-beli-bbm-ke-pertamina-ini-penyebabnya",
+        "source": "Kontan"
+      },
+      {
+        "title": "Vivo Batal Beli BBM dari Pertamina, Bagaimana dengan Shell dan BP?",
+        "link": "https://industri.kontan.co.id/news/vivo-batal-beli-bbm-dari-pertamina-bagaimana-dengan-shell-dan-bp",
+        "source": "Kontan"
+      },
+      {
+        "title": "Investor Kakap Blackrock-JP Morgan Borong Saham Blue Chip Ini, Saatnya Beli/Jual?",
+        "link": "https://investasi.kontan.co.id/news/investor-kakap-blackrock-jp-morgan-borong-saham-blue-chip-ini-saatnya-belijual",
+        "source": "Kontan"
+      },
+      {
+        "title": "Saham Mid Caps Berpotensi Melaju Hingga Akhir 2025, Ini Rekomendasi yang Potensial",
+        "link": "https://investasi.kontan.co.id/news/saham-mid-caps-berpotensi-melaju-hingga-akhir-2025-ini-rekomendasi-yang-potensial",
+        "source": "Kontan"
+      },
+      {
+        "title": "IHSG dalam Tren Bullish, Investor Harus Bagaimana?",
+        "link": "https://investasi.kontan.co.id/news/ihsg-dalam-tren-bullish-investor-harus-bagaimana",
+        "source": "Kontan"
+      },
+      {
+        "title": "IHSG Diprediksi Rebound, Ini 6 Saham Pilihan dari BNI Sekuritas untuk Kamis (2/10)",
+        "link": "https://investasi.kontan.co.id/news/ihsg-diprediksi-rebound-ini-6-saham-pilihan-dari-bni-sekuritas-untuk-kamis-210",
+        "source": "Kontan"
+      },
+      {
+        "title": "Potret Menteri Purbaya Makan di Warung Kaki Lima Usai Rapat Danantara",
+        "link": "https://nasional.kontan.co.id/news/potret-menteri-purbaya-makan-di-warung-kaki-lima-usai-rapat-danantara",
+        "source": "Kontan"
+      },
+      {
+        "title": "Saham BBCA Turun ke Rp 7.500, Jadi Harga Penutupan Terendah Sepanjang Tahun 2025",
+        "link": "https://keuangan.kontan.co.id/news/saham-bbca-turun-ke-rp-7500-jadi-harga-penutupan-terendah-sepanjang-tahun-2025",
+        "source": "Kontan"
+      },
+      {
+        "title": "Tanpa Anggaran Baru, Ini Jurus Menkeu Purbaya Biayai Stimulus Ekonomi Akhir Tahun",
+        "link": "https://nasional.kontan.co.id/news/tanpa-anggaran-baru-ini-jurus-menkeu-purbaya-biayai-stimulus-ekonomi-akhir-tahun",
+        "source": "Kontan"
+      },
+      {
+        "title": "Investor Asing Jual Bersih Rp 737 Miliar – Saham BBCA & BBRI Turun",
+        "link": "https://insight.kontan.co.id/news/investor-asing-jual-bersih-rp-737miliar-saham-bbca-bbri-turun",
+        "source": "Kontan"
+      },
+      {
+        "title": "Pengendali RMK Energy (RMKE) Jual 875 Juta Saham, Ini Tujuannya",
+        "link": "https://investasi.kontan.co.id/news/pengendali-rmk-energy-rmke-jual-875-juta-saham-ini-tujuannya",
+        "source": "Kontan"
+      },
+      {
+        "title": "Zulhas Sebut Udang Terkontaminasi Radioaktif Layak Konsumsi, Ini Alasannya!",
+        "link": "https://nasional.kontan.co.id/news/zulhas-sebut-udang-terkontaminasi-radioaktif-layak-konsumsi-ini-alasannya",
+        "source": "Kontan"
+      },
+      {
+        "title": "Data Ekonomi dan Profit Taking Membayangi Pasar, Berikut Rekomendasi Saham Hari Ini",
+        "link": "https://insight.kontan.co.id/news/data-ekonomi-dan-profit-taking-membayangi-pasar-berikut-rekomendasi-saham-hari-ini",
+        "source": "Kontan"
+      },
+      {
+        "title": "Banjir Bantuan! 8 Stimulus Ekonomi 2025 Dimulai Bulan Ini, Segini Nilai Anggarannya",
+        "link": "https://insight.kontan.co.id/news/banjir-bantuan-8-stimulus-ekonomi-2025-dimulai-bulan-ini-segini-nilai-anggarannya",
+        "source": "Kontan"
+      },
+      {
+        "title": "Laba Mekar, Saham Bank Digital Semakin Bersinar",
+        "link": "https://insight.kontan.co.id/news/laba-mekar-saham-bank-digital-semakin-bersinar",
+        "source": "Kontan"
+      },
+      {
+        "title": "Harga Terus Menanjak, Cek Saham Lapis Kedua yang Masih Prospektif Hingga Akhir Tahun",
+        "link": "https://investasi.kontan.co.id/news/harga-terus-menanjak-cek-saham-lapis-kedua-yang-masih-prospektif-hingga-akhir-tahun",
+        "source": "Kontan"
+      },
+      {
+        "title": "Harga Terbang Tinggi, Saham Teknologi Semakin Seksi",
+        "link": "https://insight.kontan.co.id/news/harga-terbang-tinggi-saham-teknologi-semakin-seksi",
+        "source": "Kontan"
+      }
+    ],
+    "count": 50,
+    "source": "Kontan",
+    "url_scraped": "https://www.kontan.co.id",
+    "directory_used": null,
+    "scraped_at": "2025-10-02T13:28:50.674307"
+  }
+}

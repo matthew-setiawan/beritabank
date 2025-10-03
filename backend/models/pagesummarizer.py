@@ -82,7 +82,8 @@ def summarize_with_gpt(title, content):
                 "date": "Try as best as possible to identify/predict date of publication based on the content or use today's date",
                 "importance": "Score from 1-5 based on relevance and impact",
                 "content": "You are a content writer, rewrite the article in english with your own analysis but style should be as a news article not a summary. Format the content with proper paragraphs separated by double newlines (\\n\\n) for better readability. Each paragraph should be well-structured and flow naturally. Make sure to rewrite and analyze the content, not just copy it.",
-                "content_id": "Indonesian translation of the English content you wrote above. Translate your rewritten English article to Indonesian, maintaining the same structure and analysis."
+                "content_id": "Indonesian translation of the English content you wrote above. Translate your rewritten English article to Indonesian, maintaining the same structure and analysis.",
+                "category": ["Array of category codes that best describe this article. Use whatever categories it can be aplied to. Use these codes: ECO (Economy and Business), BNK (Banking), FIN (Finance), MON (Monetary and Fiscal), MRK (Market Update). If no categories fit well, use an empty array []."]
             }}
             
             IMPORTANCE SCORING GUIDE:
@@ -113,7 +114,7 @@ def summarize_with_gpt(title, content):
             parsed_data = json.loads(gpt_result)
             
             # Validate required fields
-            required_fields = ['title', 'title_id', 'content', 'content_id', 'date', 'importance']
+            required_fields = ['title', 'title_id', 'content', 'content_id', 'date', 'importance', 'category']
             for field in required_fields:
                 if field not in parsed_data:
                     return {
@@ -129,6 +130,17 @@ def summarize_with_gpt(title, content):
                     parsed_data['importance'] = 3  # Default to moderate relevance
             except (ValueError, TypeError):
                 parsed_data['importance'] = 3
+            
+            # Validate category is an array and contains valid codes
+            valid_categories = ['ECO', 'BNK', 'FIN', 'MON', 'MRK']
+            if not isinstance(parsed_data.get('category'), list):
+                parsed_data['category'] = []
+            else:
+                # Filter out invalid category codes
+                parsed_data['category'] = [cat for cat in parsed_data['category'] if cat in valid_categories]
+                # Limit to maximum 2 categories
+                if len(parsed_data['category']) > 2:
+                    parsed_data['category'] = parsed_data['category'][:2]
             
             # Parse date if it's a string
             if isinstance(parsed_data['date'], str):
@@ -303,6 +315,7 @@ def save_article_to_database(url):
             'date': date,  # This is now a datetime object for proper sorting
             'date_string': date_str if 'date_str' in locals() else str(date),  # Original string for display
             'importance': importance,
+            'category': parsed_data.get('category', []),  # Add category information
             'image_url': image_url,
             'created_at': datetime.now().isoformat(),
             'original_title': article_data['original_title'],
@@ -357,6 +370,8 @@ if __name__ == "__main__":
         with open('page_summarizer_result.json', 'w', encoding='utf-8') as f:
             json.dump(output_data, f, indent=2, ensure_ascii=False, default=str)
         
+        print(f"📊 Categories: {parsed_data.get('category', [])}")
+        print(f"⭐ Importance: {parsed_data.get('importance', 'N/A')}")
         print("💾 Results saved to page_summarizer_result.json")
             
     else:

@@ -12,7 +12,7 @@ PARENT_DIR = os.path.dirname(CURRENT_DIR)
 if PARENT_DIR not in sys.path:
     sys.path.append(PARENT_DIR)
 
-from utils.gemini_utils import call_gemini
+from utils.perplexity_utils import call_perplexity_chat
 
 # Load env (for MongoDB connection)
 load_dotenv()
@@ -54,7 +54,7 @@ Return a JSON shape similar to the one below as example, but data based on what 
   "name": "{bank_name}",
   "logo_url": "https://...",
   "website_url": "https://...",
-  "rating": 4.7,
+  "rating": Rating out of 5,
   "deposit_name": "Deposito ...",
   "minimum_deposit": 10000000,
   "interest_rate": 3.5,
@@ -65,7 +65,8 @@ Return a JSON shape similar to the one below as example, but data based on what 
   "application_method": ["Online", "Branch"],
   "desc": "Short analysis: overall health, recent positive/negative news, developments, awards.",
   "desc_id": "Analisis singkat: kesehatan keseluruhan, berita positif/negatif terkini, perkembangan, penghargaan.",
-  "bank_type": "bpr"
+  "bank_type": "bpr",
+  "risk": low -> probability default < 0.5%, medium -> probability default 0.5-2%, high -> probability default > 2%
 }}
 
 Rules:
@@ -74,6 +75,7 @@ Rules:
 - minimum_deposit is integer in local currency (IDR for Indonesia).
 - tenure_options are integers in months.
 - fees is a number (0 if none apparent).
+- risk must be one of: "low", "medium", or "high" based on bank stability, recent news, and financial health.
 - Use realistic, current-seeming numbers. If uncertain, give conservative, reasonable estimates.
 - Output JSON ONLY. No commentary.
 - desc is a concise paragraph in English summarizing: (1) overall health, (2) recent positive/negative news, (3) recent developments, (4) notable awards.
@@ -82,12 +84,18 @@ Rules:
 - website_url is the official homepage of the bank (HTTPS preferred, no trackers or query params if possible).
 """
 
-    result_text = call_gemini(
-        prompt,
-        model="gemini-1.5-pro",
-        temperature=0.0,
-        google_search_retrieval=True,
+    perplexity_response = call_perplexity_chat(
+        prompt=prompt,
+        model="sonar-pro",
+        max_tokens=2000,
+        temperature=0.0
     )
+    
+    # Handle Perplexity response
+    if not perplexity_response or not perplexity_response.get('success', True):
+        return {"success": False, "error": f"Perplexity API error: {perplexity_response.get('error', 'Unknown error')}"}
+    
+    result_text = perplexity_response.get('content', '')
 
     # Handle API errors returned as strings starting with "Error:"
     if isinstance(result_text, str) and result_text.startswith("Error:"):
@@ -142,6 +150,12 @@ Rules:
             return [to_str(x) for x in v if to_str(x)]
         return []
 
+    def to_risk(v: Any) -> str:
+        risk_value = to_str(v).lower()
+        if risk_value in ["low", "medium", "high"]:
+            return risk_value
+        return "medium"  # Default to medium if invalid
+
     normalized: Dict[str, Union[str, float, int, List[int], List[str]]] = {
         "name": to_str(parsed.get("name") or bank_name),
         "logo_url": to_str(parsed.get("logo_url")),
@@ -158,6 +172,7 @@ Rules:
         "desc": to_str(parsed.get("desc")),
         "desc_id": to_str(parsed.get("desc_id")),
         "bank_type": (to_str(parsed.get("bank_type")).lower() if to_str(parsed.get("bank_type")) in ["bpr", "umum", "BPR", "UMUM"] else ("bpr" if "bpr" in bank_name.lower() else "umum")),
+        "risk": to_risk(parsed.get("risk")),
     }
 
     # Try to fetch a logo image using our image retriever if not provided or if caller prefers fresh fetch
@@ -231,6 +246,7 @@ def save_bankinfo_to_database(bank_name: str, country: str = "Indonesia") -> Dic
             "desc": data.get("desc"),
             "desc_id": data.get("desc_id"),
             "bank_type": data.get("bank_type"),
+            "risk": data.get("risk"),
             "updated_at": datetime.now().isoformat(),
         }
 

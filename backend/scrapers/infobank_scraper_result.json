@@ -1,0 +1,195 @@
+{
+  "timestamp": "2025-10-02T13:22:39.188596",
+  "scraper": "InfoBank Scraper",
+  "status": "success",
+  "data": {
+    "success": true,
+    "headlines": [
+      {
+        "title": "Jaringan Media",
+        "link": null,
+        "source": "InfoBank"
+      },
+      {
+        "title": "Kunjungan Wisman ke Indonesia Tembus 1,51 Juta di Agustus, Malaysia Terbanyak",
+        "link": "https://infobanknews.com/kunjungan-wisman-ke-indonesia-tembus-151-juta-di-agustus-malaysia-terbanyak/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Harga Beras Turun pada September 2025, BPS Ungkap Penyebabnya",
+        "link": "https://infobanknews.com/harga-beras-turun-pada-september-2025-bps-ungkap-penyebabnya/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Telat Lapor Akuisisi Saham Tokopedia, TikTok Didenda KPPU Rp15 Miliar",
+        "link": "https://infobanknews.com/telat-lapor-akuisisi-saham-tokopedia-tiktok-didenda-kppu-rp15-miliar/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Kondisi Ekonomi Tidak Pasti, UMKM Harus Tangguh dan Jeli Terapkan Strategi Pemasaran",
+        "link": "https://infobanknews.com/kondisi-ekonomi-tidak-pasti-umkm-harus-tangguh-dan-jeli-terapkan-strategi-pemasaran/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Ekspansi Jaringan Distribusi, Aqua Elektronik Gandeng Pesona Mitratama Indonesia",
+        "link": "https://infobanknews.com/ekspansi-jaringan-distribusi-aqua-elektronik-gandeng-pesona-mitratama-indonesia/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Guyuran Dana Rp200 Triliun Pemerintah Dinilai Tak Inklusif ke Bank Syariah",
+        "link": "https://infobanknews.com/guyuran-dana-rp200-triliun-pemerintah-dinilai-tak-inklusif-ke-bank-syariah/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Perkuat Pasar Logistik RI, Mitsubishi Fuso Luncurkan Fighter X FM65F Tractor Head",
+        "link": "https://infobanknews.com/perkuat-pasar-logistik-ri-mitsubishi-fuso-luncurkan-fighter-x-fm65f-tractor-head/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Restrukturisasi Indofarma Fokus Efisiensi Operasional hingga Reorientasi Bisnis",
+        "link": "https://infobanknews.com/restrukturisasi-indofarma-fokus-efisiensi-operasional-hingga-reorientasi-bisnis/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Perdana di Jakarta, Pameran Dagang Ini Boyong 380 Tenant Mancanegara",
+        "link": "https://infobanknews.com/perdana-di-jakarta-pameran-dagang-ini-boyong-380-tenant-mancanegara/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Inovasi dan GRC Perkuat Ketahanan Industri Multifinance di RI",
+        "link": "https://infobanknews.com/inovasi-dan-grc-perkuat-ketahanan-industri-multifinance-di-ri/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "News Update",
+        "link": "https://infobanknews.com/category/berita-terbaru-perbankan-dan-keuangan/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Ekonomi dan Bisnis",
+        "link": "https://infobanknews.com/category/berita-ekonomi-dan-bisnis-terbaru/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Moneter dan Fiskal",
+        "link": "https://infobanknews.com/category/moneter-dan-fiskal/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Market Update",
+        "link": "https://infobanknews.com/category/market-update/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Konten Premium ⭐",
+        "link": "https://infobanknews.com/premium/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "October 1, 2025",
+        "link": "https://infobanknews.com/kunjungan-wisman-ke-indonesia-tembus-151-juta-di-agustus-malaysia-terbanyak/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "October 1, 2025",
+        "link": "https://infobanknews.com/harga-beras-turun-pada-september-2025-bps-ungkap-penyebabnya/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Muhamad Ibrahim",
+        "link": "https://infobanknews.com/author/ibrahim/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 29, 2025",
+        "link": "https://infobanknews.com/telat-lapor-akuisisi-saham-tokopedia-tiktok-didenda-kppu-rp15-miliar/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Galih Pratama",
+        "link": "https://infobanknews.com/author/galih/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 22, 2025",
+        "link": "https://infobanknews.com/kondisi-ekonomi-tidak-pasti-umkm-harus-tangguh-dan-jeli-terapkan-strategi-pemasaran/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 21, 2025",
+        "link": "https://infobanknews.com/ekspansi-jaringan-distribusi-aqua-elektronik-gandeng-pesona-mitratama-indonesia/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Yulian Saputra",
+        "link": "https://infobanknews.com/author/julian/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 20, 2025",
+        "link": "https://infobanknews.com/guyuran-dana-rp200-triliun-pemerintah-dinilai-tak-inklusif-ke-bank-syariah/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 19, 2025",
+        "link": "https://infobanknews.com/perkuat-pasar-logistik-ri-mitsubishi-fuso-luncurkan-fighter-x-fm65f-tractor-head/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 19, 2025",
+        "link": "https://infobanknews.com/restrukturisasi-indofarma-fokus-efisiensi-operasional-hingga-reorientasi-bisnis/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 16, 2025",
+        "link": "https://infobanknews.com/perdana-di-jakarta-pameran-dagang-ini-boyong-380-tenant-mancanegara/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "September 16, 2025",
+        "link": "https://infobanknews.com/inovasi-dan-grc-perkuat-ketahanan-industri-multifinance-di-ri/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Moneter & Fiskal",
+        "link": "https://infobanknews.com/category/moneter-dan-fiskal/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Ekonomi & Bisnis",
+        "link": "https://infobanknews.com/category/berita-ekonomi-dan-bisnis-terbaru/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Internasional",
+        "link": "https://infobanknews.com/category/internasional/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "English Section",
+        "link": "https://infobanknews.com/category/english-section/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Liputan Khusus",
+        "link": "https://infobanknews.com/category/liputan-khusus/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Pedoman Media Siber",
+        "link": "https://infobanknews.com/pedoman-media-siber/",
+        "source": "InfoBank"
+      },
+      {
+        "title": "Infobanknews",
+        "link": "https://infobanknews.com/",
+        "source": "InfoBank"
+      }
+    ],
+    "count": 36,
+    "source": "InfoBank",
+    "url_scraped": "https://infobanknews.com/category/berita-ekonomi-dan-bisnis-terbaru/",
+    "directory_used": "/category/berita-ekonomi-dan-bisnis-terbaru/",
+    "scraped_at": "2025-10-02T13:22:39.188553"
+  }
+}

@@ -9,12 +9,46 @@ load_dotenv()
 
 # Default bank names to process (can be reused in beat schedule args)
 DEFAULT_BANK_NAMES = [
-    "Bank Akasia Mas",
-    "Bank Mayapada",
-    "Bank Central Asia",
+    # Major State-Owned Banks
     "Bank Mandiri",
-    "Bank BNI",
+    "Bank Rakyat Indonesia (BRI)",
+    "Bank Negara Indonesia (BNI)",
+    "Bank Tabungan Negara (BTN)",
+    
+    # Major Private Banks
+    "Bank Central Asia (BCA)",
+    "Bank Danamon",
+    "Bank Permata",
+    "Bank CIMB Niaga",
+    "Bank OCBC NISP",
+    "Bank Maybank Indonesia",
+    "Bank UOB Indonesia",
+    "Bank Standard Chartered",
+    "Bank HSBC Indonesia",
+    "Bank Citibank Indonesia",
+    "Bank Deutsche Bank Indonesia",
+    
+    # Regional Development Banks
+    "Bank DKI",
+    "Bank Jateng",
+    "Bank Jatim",
+    "Bank Jabar Banten",
+    "Bank Sumut",
+    "Bank Sumsel Babel",
+    "Bank Kaltim",
+    "Bank Kalbar",
+    "Bank Sulselbar",
+    "Bank Papua",
+    
+    # Other Notable Banks
+    "Bank Mayapada",
+    "Bank Mega",
+    "Bank Sinarmas",
+    "Bank BTPN",
+    "Bank Akasia Mas",
     "Neo Bank Commerce",
+    "Bank Jago",
+    "Bank Seabank",
 ]
 
 # Configure Celery with Redis

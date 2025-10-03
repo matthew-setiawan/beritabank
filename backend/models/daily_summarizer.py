@@ -32,23 +32,24 @@ def generate_daily_summary(user_description: str) -> dict:
         prompt = f"""
         Based on this user's financial profile: {user_description}
         
-        Provide a realistic, balanced daily financial summary and advice. Be honest about market conditions - don't sugarcoat or be overly optimistic.
+        Provide a structured daily financial summary and advice. Be honest about market conditions - don't sugarcoat or be overly optimistic.
         
         CRITICAL: Return ONLY valid JSON. No explanations, no extra text, no markdown formatting. Start with {{ and end with }}.
         
         {{
-            "summary_en": "For EACH distinct interest mentioned by the user (assets, sectors, banks, platforms, regions), write a concise update for TODAY (1-3 sentences). Start each with the interest name (e.g., 'Bitcoin:'). Use SEMICOLONS (;) to separate different interests.",
-            "summary_id": "Indonesian translation of summary_en using the SAME semicolon separators.",
-            "advice_en": "Provide STRUCTURED, actionable guidance grouped by interest as numbered points. Each item must include Action, Rationale, and Risk in one compact line. Use SEMICOLONS (;) to separate different items and interests.",
-            "advice_id": "Indonesian translation of advice_en using the SAME semicolon separators."
+            "summary_en": "Write exactly 2 paragraphs separated by pipe (|): 1) Bank Condition - Focus on bank stability and default risk (not stock performance), assess if banks mentioned are safe for deposits. **Bold all bank names** | 2) Interests - If user mentions crypto/stocks, summarize current market conditions in a few sentences. **Bold all asset names** (Bitcoin, ETH, etc.). If no specific interests mentioned, skip this paragraph.",
+            "summary_id": "Indonesian translation of summary_en with the SAME 2-paragraph structure and **bold formatting**.",
+            "advice_en": "Provide exactly 3 structured advice sections separated by pipe (|), each with 2 sentences: 1) **Bank Money Decision:** Should they pull or keep money in banks mentioned | 2) **Stocks to Watch:** This is not related to banking -> should just be about stocks or crypto advice based on user's description | 3) **New Opportunities:** Suggest new opportunities not currently investing in like 'look at Bank XXX/Crypto XXX/Stock XXX''.",
+            "advice_id": "Indonesian translation of advice_en with the SAME 3-section structure and **bold formatting**."
         }}
         
         Guidelines:
-        - Identify interests from the user's profile (e.g., Bitcoin, ETH, specific banks/platforms, sectors, regions). If none are explicit, infer 1-3 most relevant interests from context.
-        - SUMMARY: 1-3 sentences per interest. Include both positive and negative developments, and today's context. Separate interests with semicolons (;).
-        - ADVICE: 1-2 numbered items per interest. Each item must include Action, Rationale, and Risk in one compact line.
-        - Maintain balance: acknowledge volatility, uncertainty, and potential downsides. Avoid hype.
-        - Use semicolons (;) as separators - this is JSON-safe and easy to split.
+        - SUMMARY: 2 paragraphs separated by pipe (|) - Bank Condition (default risk focus) and Interests (crypto/stocks if mentioned)
+        - ADVICE: Exactly 3 sections separated by pipe (|), each with 2 sentences - Bank Money Decision, Stocks to Watch, New Opportunities
+        - FORMATTING: **Bold** all bank names, asset names (Bitcoin, ETH, etc.), and section headers (Bank Money Decision:, Stocks to Watch:, New Opportunities:)
+        - SEPARATOR: Use pipe (|) ONLY for separating sections. Do NOT use pipe (|) for any other purpose in the content.
+        - Be specific with recommendations (e.g., "XXX Bank or Mutual Funds XXX has very good interest rate, check it out")
+        - Maintain balance: acknowledge risks and volatility
         - RETURN ONLY THE JSON OBJECT - NO OTHER TEXT.
         """
         
@@ -101,6 +102,8 @@ def generate_daily_summary(user_description: str) -> dict:
                     'search_results': enhanced_search_results
             }
         except json.JSONDecodeError:
+            with open('daily_summary_result.json', 'w', encoding='utf-8') as f:
+                json.dump(json.loads(content), f, indent=2, ensure_ascii=False)
             # If direct parsing fails, try to extract JSON from the content
             try:
                 import re

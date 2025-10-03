@@ -1,0 +1,265 @@
+{
+  "timestamp": "2025-10-02T13:29:59.332006",
+  "scraper": "Bisnis.com Scraper",
+  "status": "success",
+  "data": {
+    "success": true,
+    "headlines": [
+      {
+        "title": "Dampak Kucuran Salim, Gelael, dan Haji Isam di KFC (FAST) Mulai Muncul di Pasar Modal",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Mengintip Peluang Waste-to-Energy Geber Kinerja Emiten TOBA, OASA dan BIPI",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Guyuran Stimulus demi Dongkrak Ekonomi di Atas 5%",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Menilik Penyebab Lelang 1,4 GHz Diabaikan Telkomsel hingga XLSmart (EXCL)",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisikan JP Morgan soal Risiko Pasokan Emas Freeport ke Antam (ANTM)",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "IHSG Dibuka Meluncur di Zona Hijau Naik 0,40% ke Level 8.076",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Poin-Poin RUU P2SK yang Telah Diharmonisasi",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Poin Penting UU BUMN, Era Baru Pengelolaan Pelat Merah dari Kementerian ke Badan Pengaturan",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Program Makan Bergizi Gratis (MBG)",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Purbaya Yudhi Sadewa",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Demo Gaji DPR",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Nota Keuangan 2026",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Pidato Kenegaraan Prabowo",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Berita Terbaru",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Konten Interaktif",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Regional Hari Ini",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Dari Redaksi",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Opini Bisnis",
+        "link": null,
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisnis Indonesia Premium",
+        "link": "https://premium.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisnismuda.id",
+        "link": "https://bisnismuda.id",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Konten Interaktif",
+        "link": "https://interaktif.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisnis Plus",
+        "link": "https://plus.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisnisgrafik",
+        "link": "https://infografik.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Pertagas Raih Penghargaan Tertinggi di CSR PDB Award 2025",
+        "link": "https://ekonomi.bisnis.com/read/20251002/44/1916786/pertagas-raih-penghargaan-tertinggi-di-csr-pdb-award-2025",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "WSSF 2025: Indonesia Usung Inovasi Long Term Care",
+        "link": "https://finansial.bisnis.com/read/20251002/215/1916730/wssf-2025-indonesia-usung-inovasi-long-term-care",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "PNM Peduli Hidupkan Literasi Anak di TBM Kolong Ciputat",
+        "link": "https://market.bisnis.com/read/20251002/192/1916734/pnm-peduli-hidupkan-literasi-anak-di-tbm-kolong-ciputat",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Hadir di IPB University, BGTC Bekali Mahasiswa dengan Literasi Kepemimpinan dan Konten Digital",
+        "link": "https://kabar24.bisnis.com/read/20251001/15/1916647/hadir-di-ipb-university-bgtc-bekali-mahasiswa-dengan-literasi-kepemimpinan-dan-konten-digital",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Kebakaran di IKN, Api Melahap Tower 14 Hunian Pekerja Konstruksi",
+        "link": "https://kalimantan.bisnis.com/read/20251001/407/1916642/kebakaran-di-ikn-api-melahap-tower-14-hunian-pekerja-konstruksi",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "AS Siap Lindungi Israel dari Ancaman Boikot di Piala Dunia 2026",
+        "link": "https://bola.bisnis.com/read/20251001/397/1916426/as-siap-lindungi-israel-dari-ancaman-boikot-di-piala-dunia-2026",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Peluang Besar Timnas Indonesia Lolos ke Piala Dunia 2026, Ini Syaratnya",
+        "link": "https://bola.bisnis.com/read/20251001/398/1916454/peluang-besar-timnas-indonesia-lolos-ke-piala-dunia-2026-ini-syaratnya",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Peluang Investasi di Era Penurunan Suku Bunga",
+        "link": "https://market.bisnis.com/read/20251001/7/1916451/peluang-investasi-di-era-penurunan-suku-bunga",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Basarnas Kejar 'Golden Time' untuk Evakuasi Santri Ponpes Al-Khoziny di Tengah Bangunan Berlapis",
+        "link": "https://surabaya.bisnis.com/read/20251001/531/1916455/basarnas-kejar-golden-time-untuk-evakuasi-santri-ponpes-al-khoziny-di-tengah-bangunan-berlapis",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Nyaman tanpa iklan.Langganan BisnisPro",
+        "link": "https://toko.bisnis.com/bisnis-pro",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "(Click to Visit)",
+        "link": "https://www.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Entrepreneur",
+        "link": "https://entrepreneur.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisnis Grafik",
+        "link": "https://infografik.bisnis.com",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "BisnisMuda.id",
+        "link": "https://bisnismuda.id",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Dampak Kucuran Salim, Gelael, dan Haji Isam di KFC (FAST) Mulai Muncul di Pasar Modal",
+        "link": "https://premium.bisnis.com/read/20251002/658/1916810/dampak-kucuran-salim-gelael-dan-haji-isam-di-kfc-fast-mulai-muncul-di-pasar-modal",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "ESG Investing",
+        "link": "https://www.bisnis.com/ https://hijau.bisnis.com/esg-investing ",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Mengintip Peluang Waste-to-Energy Geber Kinerja Emiten TOBA, OASA dan BIPI",
+        "link": "https://hijau.bisnis.com/read/20251002/653/1916739/mengintip-peluang-waste-to-energy-geber-kinerja-emiten-toba-oasa-dan-bipi",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Guyuran Stimulus demi Dongkrak Ekonomi di Atas 5%",
+        "link": "https://ekonomi.bisnis.com/read/20251002/9/1916783/guyuran-stimulus-demi-dongkrak-ekonomi-di-atas-5",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Telekomunikasi",
+        "link": "https://www.bisnis.com/ https://teknologi.bisnis.com/telekomunikasi ",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Menilik Penyebab Lelang 1,4 GHz Diabaikan Telkomsel hingga XLSmart (EXCL)",
+        "link": "https://teknologi.bisnis.com/read/20251002/101/1916748/menilik-penyebab-lelang-14-ghz-diabaikan-telkomsel-hingga-xlsmart-excl",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bisikan JP Morgan soal Risiko Pasokan Emas Freeport ke Antam (ANTM)",
+        "link": "https://premium.bisnis.com/read/20251002/656/1916781/bisikan-jp-morgan-soal-risiko-pasokan-emas-freeport-ke-antam-antm",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Bursa & Saham",
+        "link": "https://www.bisnis.com/ https://market.bisnis.com/bursa-saham ",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "IHSG Dibuka Meluncur di Zona Hijau Naik 0,40% ke Level 8.076",
+        "link": "https://market.bisnis.com/read/20251002/7/1916767/ihsg-dibuka-meluncur-di-zona-hijau-naik-040-ke-level-8076",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Poin-Poin RUU P2SK yang Telah Diharmonisasi",
+        "link": "https://ekonomi.bisnis.com/read/20251002/9/1916757/poin-poin-ruu-p2sk-yang-telah-diharmonisasi",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Poin Penting UU BUMN, Era Baru Pengelolaan Pelat Merah dari Kementerian ke Badan Pengaturan",
+        "link": "https://market.bisnis.com/read/20251002/192/1916725/poin-penting-uu-bumn-era-baru-pengelolaan-pelat-merah-dari-kementerian-ke-badan-pengaturan",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Program Makan Bergizi Gratis (MBG)",
+        "link": "https://www.bisnis.com/topic/61636/program-makan-bergizi-gratis-mbg",
+        "source": "Bisnis.com"
+      },
+      {
+        "title": "Purbaya Yudhi Sadewa",
+        "link": "https://www.bisnis.com/topic/17128/purbaya-yudhi-sadewa",
+        "source": "Bisnis.com"
+      }
+    ],
+    "count": 50,
+    "source": "Bisnis.com",
+    "url_scraped": "https://www.bisnis.com",
+    "directory_used": null,
+    "scraped_at": "2025-10-02T13:29:59.331956"
+  }
+}
