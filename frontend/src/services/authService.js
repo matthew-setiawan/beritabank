@@ -3,10 +3,10 @@ import { API_BASE_URL } from '../config/api';
 const AUTH_ENDPOINTS = {
   REGISTER: '/api/auth/register',
   LOGIN: '/api/auth/login',
-  CREATE_DESC: '/api/auth/create_desc',
-  REGENERATE_VERIFICATION: '/api/auth/regenerate_verification_code',
   VERIFY_EMAIL: '/api/auth/verify_email',
-  CHECK_STATUS: '/api/auth/check_status',
+  REGENERATE_CODE: '/api/auth/regenerate_verification_code',
+  USER_STATUS: '/api/auth/check_status',
+  CREATE_DESCRIPTION: '/api/auth/create_desc',
 };
 
 export const registerUser = async (userData) => {
@@ -55,66 +55,15 @@ export const loginUser = async (credentials) => {
   }
 };
 
-export const createUserDescription = async (description, token) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.CREATE_DESC}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        desc: description
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to create user description');
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Create description error:', error);
-    throw error;
-  }
-};
-
-export const regenerateVerificationCode = async (token) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.REGENERATE_VERIFICATION}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to regenerate verification code');
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Regenerate verification error:', error);
-    throw error;
-  }
-};
-
-export const verifyEmail = async (code, token) => {
+export const verifyEmail = async (verificationCode, token) => {
   try {
     const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.VERIFY_EMAIL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        code: code
-      }),
+      body: JSON.stringify({ code: verificationCode }),
     });
 
     const data = await response.json();
@@ -130,13 +79,36 @@ export const verifyEmail = async (code, token) => {
   }
 };
 
+export const regenerateVerificationCode = async (token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.REGENERATE_CODE}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to regenerate verification code');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Regenerate verification code error:', error);
+    throw error;
+  }
+};
+
 export const checkUserStatus = async (token) => {
   try {
-    const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.CHECK_STATUS}`, {
+    const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.USER_STATUS}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
       },
     });
 
@@ -149,6 +121,30 @@ export const checkUserStatus = async (token) => {
     return data;
   } catch (error) {
     console.error('Check user status error:', error);
+    throw error;
+  }
+};
+
+export const createUserDescription = async (description, token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}${AUTH_ENDPOINTS.CREATE_DESCRIPTION}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ desc: description }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to create user description');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Create user description error:', error);
     throw error;
   }
 };

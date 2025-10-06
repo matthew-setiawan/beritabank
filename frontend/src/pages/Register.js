@@ -7,6 +7,7 @@ import { registerUser, loginUser, createUserDescription } from '../services/auth
 import { API_BASE_URL } from '../config/api';
 import OnboardingFlow from '../components/OnboardingFlow';
 import EmailVerification from '../components/EmailVerification';
+import ProfileCompletion from '../components/ProfileCompletion';
 
 const Register = () => {
   const { language } = useLanguage();
@@ -26,6 +27,7 @@ const Register = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [userDescription, setUserDescription] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -92,15 +94,10 @@ const Register = () => {
   const handleOnboardingComplete = async (description) => {
     setUserDescription(description);
     setShowOnboarding(false);
-    
-    // Use the new create_desc endpoint and then login
-    await handleCreateDescriptionAndLogin(description);
+    setShowProfileCompletion(true);
   };
 
-  const handleCreateDescriptionAndLogin = async (description) => {
-    setIsLoading(true);
-    setSuccessMessage('');
-
+  const handleProfileCompletion = async (description) => {
     try {
       // Get the token from registration response
       const registrationToken = localStorage.getItem('registration_token');
@@ -124,17 +121,11 @@ const Register = () => {
       localStorage.removeItem('registration_token');
       localStorage.removeItem('user_id');
 
-      setSuccessMessage(t.onboardingCompleteSuccess);
-      
       // Redirect to Claudia page after successful onboarding
-      setTimeout(() => {
-        navigate('/claudia');
-      }, 2000);
+      navigate('/claudia');
     } catch (error) {
       console.error('Onboarding completion error:', error);
       setErrors({ general: error.message || t.onboardingError });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -205,6 +196,16 @@ const Register = () => {
   // Show onboarding flow if triggered
   if (showOnboarding) {
     return <OnboardingFlow onComplete={handleOnboardingComplete} />;
+  }
+
+  // Show profile completion loading screen after onboarding
+  if (showProfileCompletion) {
+    return (
+      <ProfileCompletion 
+        onComplete={handleProfileCompletion}
+        description={userDescription}
+      />
+    );
   }
 
   return (

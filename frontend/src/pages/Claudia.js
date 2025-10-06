@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../translations/translations';
-import { updateUserDescription, updateUserDescriptionWithContext } from '../services/claudiaService';
+import { updateUserDescription } from '../services/claudiaService';
 import { getDailySummary } from '../services/dailySummaryService';
 import TypingAnimation from '../components/TypingAnimation';
 
@@ -138,12 +138,7 @@ const Claudia = () => {
     setError(null);
 
     try {
-      // Build context from previous messages (excluding the current user message)
-      const contextMessages = messages.filter(msg => msg.role !== 'user' || msg.id !== userMessage.id);
-      const contextString = buildContextString(contextMessages);
-      
-      // Send message with context
-      const response = await updateUserDescriptionWithContext(textToSend, contextString);
+      const response = await updateUserDescription(textToSend);
       
       if (response.success) {
         const assistantMessage = {
@@ -169,18 +164,6 @@ const Claudia = () => {
       setIsLoading(false);
       setIsTyping(false);
     }
-  };
-
-  // Build context string from previous messages
-  const buildContextString = (previousMessages) => {
-    if (previousMessages.length === 0) return '';
-    
-    const contextParts = previousMessages.map(msg => {
-      const role = msg.role === 'user' ? 'User' : 'Assistant';
-      return `${role}: ${msg.content}`;
-    });
-    
-    return `Previous messages for context: ${contextParts.join(' | ')}`;
   };
 
   const handleSuggestionClick = (text) => {

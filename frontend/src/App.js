@@ -20,7 +20,7 @@ const HomeOrRedirect = () => {
   }
   
   if (statusLoading) {
-    return <ProfileCompletion />;
+    return <div className="loading-container"><div className="loading-spinner"></div><p>Loading...</p></div>;
   }
   
   if (userStatus && !userStatus.all_requirements_met) {
@@ -38,7 +38,7 @@ const ProtectedClaudia = () => {
   }
   
   if (statusLoading) {
-    return <ProfileCompletion />;
+    return <div className="loading-container"><div className="loading-spinner"></div><p>Loading...</p></div>;
   }
   
   if (userStatus && !userStatus.all_requirements_met) {

@@ -1,111 +1,138 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { translations } from '../translations/translations';
+import { createUserDescription } from '../services/authService';
 import EmailVerification from './EmailVerification';
 import OnboardingFlow from './OnboardingFlow';
 
-const ProfileCompletion = () => {
+const ProfileCompletion = ({ onComplete, description }) => {
   const { language } = useLanguage();
   const { user, token, userStatus, statusLoading, refreshUserStatus } = useAuth();
-  const navigate = useNavigate();
   const t = translations[language];
-  const [isCompletingOnboarding, setIsCompletingOnboarding] = useState(false);
+  const navigate = useNavigate();
+  
+  const [currentStep, setCurrentStep] = useState('checking');
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    // Only refresh user status if we don't have status data yet
-    if (token && !userStatus && !statusLoading) {
-      refreshUserStatus();
+    // If we have a description from Register component, go directly to saving
+    if (description) {
+      setCurrentStep('saving');
+      handleOnboardingComplete(description);
+      return;
     }
-  }, [token, userStatus, statusLoading, refreshUserStatus]);
 
-  // Show completion loading screen
-  if (isCompletingOnboarding) {
+    if (userStatus && !statusLoading) {
+      if (!userStatus.is_verified && !userStatus.has_description) {
+        setCurrentStep('email-verification');
+      } else if (!userStatus.is_verified) {
+        setCurrentStep('email-verification');
+      } else if (!userStatus.has_description) {
+        setCurrentStep('onboarding');
+      } else {
+        // All requirements met, redirect to Claudia
+        navigate('/claudia');
+      }
+    }
+  }, [userStatus, statusLoading, navigate, description]);
+
+  const handleEmailVerified = () => {
+    // Refresh user status after email verification
+    refreshUserStatus().then(() => {
+      // The useEffect will handle the next step
+    });
+  };
+
+  const handleOnboardingComplete = async (description) => {
+    setIsSaving(true);
+    try {
+      if (onComplete) {
+        // Use the custom completion handler from Register component
+        await onComplete(description);
+      } else {
+        // Save the description to the backend
+        await createUserDescription(description, token);
+        
+        // Refresh user status after successful save
+        await refreshUserStatus();
+      }
+    } catch (error) {
+      console.error('Failed to save user description:', error);
+      setIsSaving(false);
+      // You might want to show an error message to the user here
+    }
+  };
+
+  if (statusLoading || currentStep === 'checking') {
     return (
       <div className="profile-completion-container">
-        <div className="profile-completion-card">
-          <div className="completion-loading">
-            <div className="claudia-avatar">🤖</div>
-            <h2 className="completion-title">{t.settingUpProfile}</h2>
-            <div className="loading-spinner"></div>
-            <p className="completion-subtitle">{t.almostDone}</p>
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>{t.checkingProfileStatus}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isSaving || currentStep === 'saving') {
+    return (
+      <div className="profile-completion-container">
+        <div className="saving-container">
+          <div className="claudia-avatar">🤖</div>
+          <h2 className="saving-title">{t.settingUpProfile}</h2>
+          <div className="loading-spinner"></div>
+          <p className="saving-subtitle">{t.creatingPersonalizedExperience}</p>
+          <div className="progress-steps">
+            <div className="step completed">
+              <span className="step-icon">✅</span>
+              <span className="step-text">{t.onboardingCompleted}</span>
+            </div>
+            <div className="step active">
+              <span className="step-icon">⏳</span>
+              <span className="step-text">{t.savingPreferences}</span>
+            </div>
+            <div className="step pending">
+              <span className="step-icon">⏸️</span>
+              <span className="step-text">{t.generatingSummary}</span>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  // Show loading while checking status
-  if (statusLoading) {
-    return (
-      <div className="profile-completion-container">
-        <div className="profile-completion-card">
-          <div className="loading-content">
-            <div className="loading-spinner"></div>
-            <p>{t.checkingProfile}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // If user status is not available, redirect to login
-  if (!userStatus) {
-    navigate('/login');
-    return null;
-  }
-
-  // If all requirements are met, redirect to home
-  if (userStatus.all_requirements_met) {
-    navigate('/');
-    return null;
-  }
-
-  // Handle email verification requirement
-  if (userStatus.missing_requirements.includes('email_verification')) {
+  if (currentStep === 'email-verification') {
     return (
       <EmailVerification
-        email={user.email}
+        email={user?.email}
         token={token}
-        onVerified={() => {
-          refreshUserStatus();
-        }}
+        onVerified={handleEmailVerified}
       />
     );
   }
 
-  // Handle user description requirement (onboarding)
-  if (userStatus.missing_requirements.includes('user_description')) {
+  if (currentStep === 'onboarding') {
     return (
       <OnboardingFlow
-        onComplete={async (description) => {
-          try {
-            // Show completion loading screen
-            setIsCompletingOnboarding(true);
-            
-            // Create user description
-            const { createUserDescription } = await import('../services/authService');
-            await createUserDescription(description, token);
-            
-            // Wait a bit for better UX
-            setTimeout(async () => {
-              // Refresh user status
-              await refreshUserStatus();
-              setIsCompletingOnboarding(false);
-            }, 2000);
-          } catch (error) {
-            console.error('Failed to create user description:', error);
-            setIsCompletingOnboarding(false);
-          }
-        }}
+        onComplete={handleOnboardingComplete}
       />
     );
   }
 
-  // Fallback - redirect to home
-  navigate('/');
-  return null;
+  // Fallback - should not reach here
+  return (
+    <div className="profile-completion-container">
+      <div className="error-container">
+        <h2>{t.somethingWentWrong}</h2>
+        <p>{t.pleaseRefreshPage}</p>
+        <button onClick={() => window.location.reload()}>
+          {t.refreshPage}
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default ProfileCompletion;

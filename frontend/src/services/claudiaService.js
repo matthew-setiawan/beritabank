@@ -63,30 +63,3 @@ export const updateUserDescription = async (message) => {
     throw error;
   }
 };
-
-export const updateUserDescriptionWithContext = async (message, context) => {
-  try {
-    // Combine context and new message
-    const messageWithContext = context ? `${context}\n\n${message}` : message;
-    
-    const response = await fetch(`${API_BASE_URL}${CLAUDIA_ENDPOINTS.UPDATE_DESC}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders(),
-      },
-      body: JSON.stringify({ message: messageWithContext }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to update user description');
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Update description with context error:', error);
-    throw error;
-  }
-};

@@ -128,25 +128,6 @@ export const translations = {
     loginToContinue: 'Login to continue to Claudia AI',
     signIn: 'Sign In',
     
-    // Email Verification
-    verifyEmailTitle: 'Verify Your Email',
-    verifyEmailSubtitle: 'We sent a 6-digit verification code to {email}',
-    verificationCodeLabel: 'Enter Verification Code',
-    verificationCodeInvalid: 'Please enter a valid 6-digit code',
-    verificationFailed: 'Verification failed. Please try again.',
-    emailVerifiedSuccess: 'Email verified successfully!',
-    verifying: 'Verifying...',
-    verifyEmail: 'Verify Email',
-    didntReceiveCode: "Didn't receive the code?",
-    resendIn: 'Resend code in {time}',
-    resendCode: 'Resend Code',
-    sending: 'Sending...',
-    verificationCodeSent: 'New verification code sent!',
-    resendFailed: 'Failed to resend code. Please try again.',
-    checkingProfile: 'Checking your profile...',
-    settingUpProfile: 'Setting up your profile...',
-    almostDone: 'Almost done!',
-    
     // Onboarding Questions
     welcomeToOnboarding: 'Welcome! Let\'s personalize your experience',
     onboardingIntro: 'I\'m Claudia, your AI financial assistant. To provide you with the most relevant news and insights, I\'d like to learn about your financial situation and interests.',
@@ -191,6 +172,35 @@ export const translations = {
     dailySummary: 'Daily Summary',
     claudiaAdvice: 'Claudia\'s Advice',
     relatedNews: 'Related News',
+    
+    // Email Verification
+    verifyEmailTitle: 'Verify Your Email',
+    verifyEmailSubtitle: 'We\'ve sent a verification code to {email}. Please enter the code below.',
+    verificationCodeLabel: 'Verification Code',
+    verificationCodeInvalid: 'Please enter a valid 6-digit verification code',
+    emailVerifiedSuccess: 'Email verified successfully!',
+    verificationFailed: 'Verification failed. Please try again.',
+    verificationCodeSent: 'New verification code sent!',
+    resendFailed: 'Failed to resend code. Please try again.',
+    didntReceiveCode: 'Didn\'t receive the code?',
+    resendIn: 'Resend code in {time}',
+    resendCode: 'Resend Code',
+    verifying: 'Verifying...',
+    sending: 'Sending...',
+    verifyEmail: 'Verify Email',
+    onboardingCompleteSuccess: 'Profile setup completed successfully!',
+    onboardingError: 'Failed to complete profile setup',
+    
+    // Profile Completion
+    checkingProfileStatus: 'Checking your profile status...',
+    somethingWentWrong: 'Something went wrong',
+    pleaseRefreshPage: 'Please try refreshing the page.',
+    refreshPage: 'Refresh Page',
+    settingUpProfile: 'Setting up your profile...',
+    creatingPersonalizedExperience: 'Creating your personalized experience',
+    onboardingCompleted: 'Onboarding completed',
+    savingPreferences: 'Saving your preferences',
+    generatingSummary: 'Generating daily summary',
   },
   
   id: {
@@ -322,25 +332,6 @@ export const translations = {
     loginToContinue: 'Masuk untuk melanjutkan ke Claudia AI',
     signIn: 'Masuk',
     
-    // Email Verification
-    verifyEmailTitle: 'Verifikasi Email Anda',
-    verifyEmailSubtitle: 'Kami mengirim kode verifikasi 6 digit ke {email}',
-    verificationCodeLabel: 'Masukkan Kode Verifikasi',
-    verificationCodeInvalid: 'Silakan masukkan kode 6 digit yang valid',
-    verificationFailed: 'Verifikasi gagal. Silakan coba lagi.',
-    emailVerifiedSuccess: 'Email berhasil diverifikasi!',
-    verifying: 'Memverifikasi...',
-    verifyEmail: 'Verifikasi Email',
-    didntReceiveCode: 'Tidak menerima kode?',
-    resendIn: 'Kirim ulang kode dalam {time}',
-    resendCode: 'Kirim Ulang Kode',
-    sending: 'Mengirim...',
-    verificationCodeSent: 'Kode verifikasi baru dikirim!',
-    resendFailed: 'Gagal mengirim ulang kode. Silakan coba lagi.',
-    checkingProfile: 'Memeriksa profil Anda...',
-    settingUpProfile: 'Menyiapkan profil Anda...',
-    almostDone: 'Hampir selesai!',
-    
     // Onboarding Questions
     welcomeToOnboarding: 'Selamat datang! Mari personalisasi pengalaman Anda',
     onboardingIntro: 'Saya Claudia, asisten keuangan AI Anda. Untuk memberikan berita dan wawasan yang paling relevan, saya ingin mempelajari situasi keuangan dan minat Anda.',
@@ -385,5 +376,34 @@ export const translations = {
     dailySummary: 'Ringkasan Harian',
     claudiaAdvice: 'Saran Claudia',
     relatedNews: 'Berita Terkait',
+    
+    // Email Verification
+    verifyEmailTitle: 'Verifikasi Email Anda',
+    verifyEmailSubtitle: 'Kami telah mengirim kode verifikasi ke {email}. Silakan masukkan kode di bawah ini.',
+    verificationCodeLabel: 'Kode Verifikasi',
+    verificationCodeInvalid: 'Silakan masukkan kode verifikasi 6 digit yang valid',
+    emailVerifiedSuccess: 'Email berhasil diverifikasi!',
+    verificationFailed: 'Verifikasi gagal. Silakan coba lagi.',
+    verificationCodeSent: 'Kode verifikasi baru telah dikirim!',
+    resendFailed: 'Gagal mengirim ulang kode. Silakan coba lagi.',
+    didntReceiveCode: 'Tidak menerima kode?',
+    resendIn: 'Kirim ulang kode dalam {time}',
+    resendCode: 'Kirim Ulang Kode',
+    verifying: 'Memverifikasi...',
+    sending: 'Mengirim...',
+    verifyEmail: 'Verifikasi Email',
+    onboardingCompleteSuccess: 'Setup profil berhasil diselesaikan!',
+    onboardingError: 'Gagal menyelesaikan setup profil',
+    
+    // Profile Completion
+    checkingProfileStatus: 'Memeriksa status profil Anda...',
+    somethingWentWrong: 'Terjadi kesalahan',
+    pleaseRefreshPage: 'Silakan coba refresh halaman.',
+    refreshPage: 'Refresh Halaman',
+    settingUpProfile: 'Menyiapkan profil Anda...',
+    creatingPersonalizedExperience: 'Membuat pengalaman yang dipersonalisasi',
+    onboardingCompleted: 'Onboarding selesai',
+    savingPreferences: 'Menyimpan preferensi Anda',
+    generatingSummary: 'Membuat ringkasan harian',
   }
 };

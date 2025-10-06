@@ -13,15 +13,25 @@ const EmailVerification = ({ email, token, onVerified }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [canResend, setCanResend] = useState(false);
+  const [canResend, setCanResend] = useState(true); // Start with button clickable
+  const [countdownActive, setCountdownActive] = useState(false);
 
-  useEffect(() => {
-    // Start countdown timer (assuming 5 minutes = 300 seconds)
-    setTimeRemaining(300);
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const startCountdown = (minutes = 5) => {
+    setTimeRemaining(minutes * 60);
+    setCanResend(false);
+    setCountdownActive(true);
+    
     const timer = setInterval(() => {
       setTimeRemaining(prev => {
         if (prev <= 1) {
           setCanResend(true);
+          setCountdownActive(false);
           clearInterval(timer);
           return 0;
         }
@@ -29,13 +39,7 @@ const EmailVerification = ({ email, token, onVerified }) => {
       });
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return timer;
   };
 
   const handleCodeChange = (e) => {
@@ -77,30 +81,33 @@ const EmailVerification = ({ email, token, onVerified }) => {
   const handleResendCode = async () => {
     setIsResending(true);
     setError('');
+    setSuccess('');
 
     try {
       const response = await regenerateVerificationCode(token);
       
       if (response.success) {
         setSuccess(t.verificationCodeSent);
-        setTimeRemaining(300);
-        setCanResend(false);
-        
-        // Restart countdown
-        const timer = setInterval(() => {
-          setTimeRemaining(prev => {
-            if (prev <= 1) {
-              setCanResend(true);
-              clearInterval(timer);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        // Start 5-minute countdown after successful resend
+        startCountdown(5);
       }
     } catch (error) {
       console.error('Resend error:', error);
-      setError(error.message || t.resendFailed);
+      
+      // Check if it's a "code still valid" error
+      if (error.message && error.message.includes('still valid')) {
+        // Extract minutes from error message
+        const minutesMatch = error.message.match(/(\d+) minutes/);
+        const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 5;
+        
+        setError(error.message);
+        // Start countdown based on the error message
+        startCountdown(minutes);
+      } else {
+        setError(error.message || t.resendFailed);
+        // Start default 5-minute countdown for other errors
+        startCountdown(5);
+      }
     } finally {
       setIsResending(false);
     }
@@ -160,7 +167,10 @@ const EmailVerification = ({ email, token, onVerified }) => {
 
         <div className="resend-section">
           <p className="resend-text">
-            {canResend ? t.didntReceiveCode : t.resendIn.replace('{time}', formatTime(timeRemaining))}
+            {countdownActive 
+              ? t.resendIn.replace('{time}', formatTime(timeRemaining))
+              : t.didntReceiveCode
+            }
           </p>
           <button
             type="button"
@@ -177,3 +187,4 @@ const EmailVerification = ({ email, token, onVerified }) => {
 };
 
 export default EmailVerification;
+
