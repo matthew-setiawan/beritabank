@@ -1787,17 +1787,254 @@ code {
   overflow: hidden;
 }
 
+/* Right Column - Preferences and Chat Stack */
+.claudia-right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 2rem;
+  margin-left: 0;
+  gap: 1rem;
+}
+
+/* Dummy Preferences (compact, above chat) */
+.dummy-preferences {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 100%; /* Fixed width to prevent horizontal expansion */
+  max-width: 100%; /* Ensure it doesn't exceed parent width */
+}
+
+.dummy-pref-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #fff;
+}
+
+.dummy-pref-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.dummy-pref-subtitle {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-left: 0.5rem;
+}
+
+.dummy-pref-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.dummy-pref-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dummy-pref-content {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%; /* Ensure content doesn't expand beyond container */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.dummy-pref-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  min-height: 24px;
+  width: 100%; /* Fixed width for row */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.dummy-pref-label {
+  font-weight: 600;
+  color: #333;
+  min-width: 60px;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.dummy-pref-tags-scroll {
+  display: flex;
+  gap: 0.3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+  padding-bottom: 0.2rem;
+  scrollbar-width: none; /* Hide scrollbar on Firefox */
+  max-height: 24px;
+  min-width: 0; /* Allow flex item to shrink below content size */
+  width: 0; /* Force flex item to respect container width */
+}
+
+.dummy-pref-tags-scroll::-webkit-scrollbar {
+  height: 0; /* Hide scrollbar on WebKit */
+}
+
+.dummy-pref-tag {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.dummy-pref-tag.bank {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.dummy-pref-tag.asset {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+/* Preferences Section Styles */
+.preferences-section {
+  margin: 2rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.preferences-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.preferences-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+}
+
+.preferences-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.preferences-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.preferences-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.preferences-content {
+  padding: 1rem 1.2rem;
+}
+
+.preferences-loading,
+.preferences-error,
+.preferences-empty {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.preferences-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.preferences-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  min-width: 50px;
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.preference-tag {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.bank-tag {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+}
+
+.asset-tag {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+}
+
+.preference-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.no-tags {
+  color: #999;
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
 .claudia-chat-section {
   flex: 1;
   background: white;
   border-radius: 20px;
-  margin: 2rem;
-  margin-left: 0;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  height: calc(100vh - 144px); /* Account for navbar + margins */
+  min-height: 400px;
+  transition: all 0.3s ease;
+}
+
+.claudia-chat-section.expanded {
+  min-height: 500px;
 }
 
 .claudia-chat-container {
@@ -2047,10 +2284,60 @@ code {
     padding: 1rem;
   }
   
+  .claudia-right-column {
+    margin: 1rem;
+    margin-left: 0;
+    gap: 0.5rem;
+  }
+  
+  .preferences-section {
+    margin: 1rem;
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .preferences-header {
+    padding: 0.6rem 1rem;
+  }
+  
+  .preferences-header h3 {
+    font-size: 0.9rem;
+  }
+  
+  .preferences-content {
+    padding: 0.8rem 1rem;
+  }
+  
+  .preferences-tags {
+    gap: 0.6rem;
+  }
+  
+  .category-label {
+    font-size: 0.8rem;
+    min-width: 45px;
+  }
+  
+  .preference-tag {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
   .claudia-chat-section {
     flex: none;
-    margin: 1rem;
-    height: 400px;
+    min-height: 300px;
+  }
+  
+  .claudia-chat-section.expanded {
+    min-height: 400px;
+  }
+  
+  .dummy-pref-tags-scroll {
+    gap: 0.2rem;
+  }
+  
+  .dummy-pref-tag {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
   }
   
   .summary-text-content {

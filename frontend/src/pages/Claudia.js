@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../translations/translations';
-import { updateUserDescription } from '../services/claudiaService';
+import { updateUserDescription, getPreferenceTags } from '../services/claudiaService';
 import { getDailySummary } from '../services/dailySummaryService';
 import TypingAnimation from '../components/TypingAnimation';
 
@@ -25,6 +25,13 @@ const Claudia = () => {
   const [summaryError, setSummaryError] = useState(null);
   const [summaryDataLoading, setSummaryDataLoading] = useState(true);
   const [adviceDataLoading, setAdviceDataLoading] = useState(true);
+  // Preferences minimized state controls header toggle and chat resizing
+  const [preferencesMinimized, setPreferencesMinimized] = useState(true);
+  // Preferences data states
+  const [preferences, setPreferences] = useState({ banks: [], assets: [] });
+  const [preferencesLoading, setPreferencesLoading] = useState(false);
+  const [preferencesError, setPreferencesError] = useState(null);
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,6 +66,7 @@ const Claudia = () => {
   useEffect(() => {
     // Load initial data when component mounts
     loadInitialData();
+    loadPreferences();
   }, []);
 
   const loadInitialData = async () => {
@@ -78,10 +86,30 @@ const Claudia = () => {
     setMessages([dummyMessage]);
   };
 
-  // Load daily summary when language changes
+  const loadPreferences = async () => {
+    setPreferencesLoading(true);
+    setPreferencesError(null);
+    try {
+      const resp = await getPreferenceTags();
+      const data = resp?.data || resp;
+      setPreferences({
+        banks: Array.isArray(data?.banks) ? data.banks : [],
+        assets: Array.isArray(data?.assets) ? data.assets : [],
+      });
+    } catch (e) {
+      setPreferencesError(e.message || 'Failed to load preference tags');
+    } finally {
+      setPreferencesLoading(false);
+    }
+  };
+
+  // Load daily summary and preferences when language changes
   useEffect(() => {
     if (dailySummary) {
       loadDailySummary();
+    }
+    if (preferences.banks.length > 0 || preferences.assets.length > 0) {
+      loadPreferences();
     }
   }, [language]);
 
@@ -138,7 +166,18 @@ const Claudia = () => {
     setError(null);
 
     try {
-      const response = await updateUserDescription(textToSend);
+      // Prepare conversation history as concatenated string
+      const conversationHistory = messages
+        .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+        .map(msg => `${msg.role}: ${msg.content}`)
+        .join('\n');
+
+      // Add current user message to history
+      const fullConversationHistory = conversationHistory + 
+        (conversationHistory ? '\n' : '') + 
+        `user: ${textToSend}`;
+
+      const response = await updateUserDescription(fullConversationHistory);
       
       if (response.success) {
         const assistantMessage = {
@@ -151,9 +190,10 @@ const Claudia = () => {
         
         setMessages(prev => [...prev, assistantMessage]);
         
-        // If daily summary was reset, reload the daily summary from API
+        // If daily summary was reset, reload both daily summary and preferences from API
         if (response.data?.daily_summary_reset) {
           loadDailySummary();
+          loadPreferences();
         }
       } else {
         setError(response.error || 'Failed to update preferences');
@@ -302,8 +342,60 @@ const Claudia = () => {
         </div>
       </div>
 
-      {/* Chat Section - 1/4 width */}
-      <div className="claudia-chat-section">
+      {/* Right Column - Preferences and Chat */}
+      <div className="claudia-right-column">
+        {/* Dummy Preferences - Above Chat */}
+        <div className="dummy-preferences">
+          <div className="dummy-pref-header">
+            <div className="dummy-pref-title">Your Preferences</div>
+            <div className="dummy-pref-subtitle">Use Claudia to adjust these preferences</div>
+            <button 
+              className="dummy-pref-toggle"
+              onClick={() => setPreferencesMinimized(!preferencesMinimized)}
+            >
+              {preferencesMinimized ? '▲' : '▼'}
+            </button>
+          </div>
+          {!preferencesMinimized && (
+            <div className="dummy-pref-content">
+              <div className="dummy-pref-row">
+                <span className="dummy-pref-label">Banks:</span>
+                <div className="dummy-pref-tags-scroll">
+                  {preferencesLoading ? (
+                    <span className="dummy-pref-tag bank" style={{ background: '#6c757d' }}>Loading...</span>
+                  ) : preferencesError ? (
+                    <span className="dummy-pref-tag bank" style={{ background: '#6c757d' }}>Failed to load</span>
+                  ) : (preferences.banks && preferences.banks.length > 0 ? (
+                    preferences.banks.map((bank, idx) => (
+                      <span key={`bank-${idx}`} className="dummy-pref-tag bank">{bank}</span>
+                    ))
+                  ) : (
+                    <span className="dummy-pref-tag bank" style={{ background: '#6c757d' }}>No banks</span>
+                  ))}
+                </div>
+              </div>
+              <div className="dummy-pref-row">
+                <span className="dummy-pref-label">Assets:</span>
+                <div className="dummy-pref-tags-scroll">
+                  {preferencesLoading ? (
+                    <span className="dummy-pref-tag asset" style={{ background: '#6c757d' }}>Loading...</span>
+                  ) : preferencesError ? (
+                    <span className="dummy-pref-tag asset" style={{ background: '#6c757d' }}>Failed to load</span>
+                  ) : (preferences.assets && preferences.assets.length > 0 ? (
+                    preferences.assets.map((asset, idx) => (
+                      <span key={`asset-${idx}`} className="dummy-pref-tag asset">{asset}</span>
+                    ))
+                  ) : (
+                    <span className="dummy-pref-tag asset" style={{ background: '#6c757d' }}>No assets</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Chat Section - Below Preferences */}
+        <div className={`claudia-chat-section ${preferencesMinimized ? 'expanded' : 'normal'}`}>
         <div className="claudia-chat-container">
           {/* Messages */}
           <div className="claudia-messages">
@@ -449,6 +541,7 @@ const Claudia = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

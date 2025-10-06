@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../config/api';
 const CLAUDIA_ENDPOINTS = {
   MESSAGE: '/api/message',
   UPDATE_DESC: '/api/update_desc',
+  PREFERENCE_TAGS: '/api/auth/preference_tags',
 };
 
 const getAuthHeaders = () => {
@@ -48,7 +49,9 @@ export const updateUserDescription = async (message) => {
         'Content-Type': 'application/json',
         ...getAuthHeaders(),
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ 
+        message
+      }),
     });
 
     const data = await response.json();
@@ -60,6 +63,29 @@ export const updateUserDescription = async (message) => {
     return data;
   } catch (error) {
     console.error('Update description error:', error);
+    throw error;
+  }
+};
+
+export const getPreferenceTags = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}${CLAUDIA_ENDPOINTS.PREFERENCE_TAGS}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to get preference tags');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Get preference tags error:', error);
     throw error;
   }
 };
