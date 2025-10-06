@@ -91,7 +91,7 @@ def get_kontan_news(directory=None):
                             headlines.append(headline_data)
             
             # Limit to first 50 headlines to avoid too much data
-            headlines = headlines[:10]
+            headlines = headlines[:20]
             
             return {
                 'success': True,

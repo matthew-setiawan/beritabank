@@ -389,12 +389,20 @@ def create_desc():
         user = request.current_user
         data = request.get_json()
         
+        # Debug logging
+        print(f"[DEBUG] create_desc - Request data: {data}")
+        print(f"[DEBUG] create_desc - Content-Type: {request.content_type}")
+        print(f"[DEBUG] create_desc - User: {user.get('username', 'Unknown') if user else 'No user'}")
+        
         if not data:
+            print("[DEBUG] create_desc - No JSON data provided")
             return jsonify({'success': False, 'error': 'No JSON data provided'}), 400
         
         desc = data.get('desc', '').strip()
+        print(f"[DEBUG] create_desc - Description: '{desc}' (length: {len(desc)})")
         
         if not desc:
+            print("[DEBUG] create_desc - Description is empty or missing")
             return jsonify({'success': False, 'error': 'Description is required'}), 400
         
         # Generate daily summary for the user
@@ -701,6 +709,186 @@ def check_user_status():
         
     except Exception as e:
         return jsonify({'success': False, 'error': f'Failed to check user status: {str(e)}'}), 500
+
+@app.route('/api/auth/preference_tags', methods=['GET'])
+@require_auth(user_collection)
+def get_preference_tags():
+    """
+    Get user's preference tags (banks and assets) based on their description
+    
+    Headers:
+        Authorization: Bearer <token>
+    
+    Returns:
+        JSON with banks and assets arrays based on user description
+    """
+    try:
+        user = request.current_user
+        
+        # Get user's description
+        user_desc = user.get('desc', '')
+        
+        if not user_desc or not user_desc.strip():
+            return jsonify({
+                'success': False,
+                'error': 'User description is required to generate preference tags',
+                'data': {
+                    'banks': [],
+                    'assets': []
+                }
+            }), 400
+        
+        # Generate preference tags using the preference_tags function
+        from models.preference_tags import generate_preference_tags
+        result = generate_preference_tags(user_desc)
+        
+        if not result['success']:
+            return jsonify({
+                'success': False,
+                'error': f'Failed to generate preference tags: {result["error"]}',
+                'data': {
+                    'banks': [],
+                    'assets': []
+                }
+            }), 500
+        
+        return jsonify({
+            'success': True,
+            'message': 'Preference tags generated successfully',
+            'data': {
+                'banks': result['data']['banks'],
+                'assets': result['data']['assets'],
+                'user_description': user_desc
+            }
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Failed to get preference tags: {str(e)}',
+            'data': {
+                'banks': [],
+                'assets': []
+            }
+        }), 500
+
+@app.route('/api/auth/change_password', methods=['POST'])
+@require_auth(user_collection)
+def change_password():
+    """
+    Change user's password
+    
+    Headers:
+        Authorization: Bearer <token>
+    
+    Expected JSON:
+    {
+        "current_password": "string",
+        "new_password": "string"
+    }
+    """
+    try:
+        user = request.current_user
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': 'No JSON data provided'}), 400
+        
+        current_password = data.get('current_password')
+        new_password = data.get('new_password')
+        
+        if not current_password or not new_password:
+            return jsonify({'success': False, 'error': 'Current password and new password are required'}), 400
+        
+        # Validate new password - 8+ characters, must contain letters, numbers, and special characters
+        if len(new_password) < 8:
+            return jsonify({'success': False, 'error': 'New password must be at least 8 characters long'}), 400
+        
+        # Check for at least one letter
+        has_letter = any(c.isalpha() for c in new_password)
+        if not has_letter:
+            return jsonify({'success': False, 'error': 'New password must contain at least one letter'}), 400
+        
+        # Check for at least one number
+        has_number = any(c.isdigit() for c in new_password)
+        if not has_number:
+            return jsonify({'success': False, 'error': 'New password must contain at least one number'}), 400
+        
+        # Check for at least one special character
+        special_chars = "!@#$%^&*()_+-=[]{}|;:,.<>?"
+        has_special = any(c in special_chars for c in new_password)
+        if not has_special:
+            return jsonify({'success': False, 'error': 'New password must contain at least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)'}), 400
+        
+        # Verify current password
+        if not verify_password(current_password, user['password_hash'], user['salt']):
+            return jsonify({'success': False, 'error': 'Current password is incorrect'}), 401
+        
+        # Hash new password
+        new_password_hash, new_salt = hash_password(new_password)
+        
+        # Update user's password in database
+        user_collection.update_one(
+            {'_id': user['_id']},
+            {
+                '$set': {
+                    'password_hash': new_password_hash,
+                    'salt': new_salt
+                }
+            }
+        )
+        
+        return jsonify({
+            'success': True,
+            'message': 'Password changed successfully'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to change password: {str(e)}'}), 500
+
+@app.route('/api/auth/delete_account', methods=['DELETE'])
+@require_auth(user_collection)
+def delete_account():
+    """
+    Delete user account permanently
+    
+    Headers:
+        Authorization: Bearer <token>
+    
+    Expected JSON:
+    {
+        "password": "string" (for confirmation)
+    }
+    """
+    try:
+        user = request.current_user
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'success': False, 'error': 'No JSON data provided'}), 400
+        
+        password = data.get('password')
+        
+        if not password:
+            return jsonify({'success': False, 'error': 'Password is required to delete account'}), 400
+        
+        # Verify password
+        if not verify_password(password, user['password_hash'], user['salt']):
+            return jsonify({'success': False, 'error': 'Password is incorrect'}), 401
+        
+        # Delete user from database
+        result = user_collection.delete_one({'_id': user['_id']})
+        
+        if result.deleted_count == 0:
+            return jsonify({'success': False, 'error': 'Failed to delete account'}), 500
+        
+        return jsonify({
+            'success': True,
+            'message': 'Account deleted successfully'
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to delete account: {str(e)}'}), 500
 
 @app.route('/api/auth/me', methods=['GET'])
 @require_auth(user_collection)
