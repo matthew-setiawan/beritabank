@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { translations } from '../translations/translations';
 import LoginRequiredModal from './LoginRequiredModal';
+import SettingsModal from './SettingsModal';
 import logo from '../beritabanklogo.png';
 
 const Navbar = () => {
@@ -11,6 +12,7 @@ const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
   const t = translations[language];
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const location = useLocation();
 
   const handleAIAssistantClick = (e) => {
@@ -22,6 +24,14 @@ const Navbar = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const openSettings = () => {
+    setIsSettingsOpen(true);
+  };
+
+  const closeSettings = () => {
+    setIsSettingsOpen(false);
   };
 
   const handleLanguageChange = (newLanguage) => {
@@ -59,7 +69,12 @@ const Navbar = () => {
           {/* Login/Signup Buttons and Language Toggle */}
           <div className="navbar-actions">
             {isAuthenticated ? (
-              <button className="btn btn-outline" onClick={logout}>Logout</button>
+              <>
+                <button className="btn btn-outline settings-btn" onClick={openSettings}>
+                  ⚙️ {t.settings}
+                </button>
+                <button className="btn btn-outline" onClick={logout}>Logout</button>
+              </>
             ) : (
               <>
                 <Link to="/login" className="btn btn-outline">{t.login}</Link>
@@ -89,6 +104,12 @@ const Navbar = () => {
       <LoginRequiredModal 
         isOpen={isModalOpen} 
         onClose={closeModal} 
+      />
+      
+      {/* Settings Modal */}
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={closeSettings} 
       />
     </nav>
   );

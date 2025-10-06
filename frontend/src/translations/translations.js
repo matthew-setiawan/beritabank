@@ -201,6 +201,25 @@ export const translations = {
     onboardingCompleted: 'Onboarding completed',
     savingPreferences: 'Saving your preferences',
     generatingSummary: 'Generating daily summary',
+    
+    // Settings
+    settings: 'Settings',
+    userDetails: 'User Details',
+    changePassword: 'Change Password',
+    deleteAccount: 'Delete Account',
+    currentPassword: 'Current Password',
+    newPassword: 'New Password',
+    confirmNewPassword: 'Confirm New Password',
+    passwordChangedSuccess: 'Password changed successfully!',
+    passwordChangeError: 'Failed to change password',
+    passwordRequirements: 'Password must be at least 8 characters long and contain letters, numbers, and special characters',
+    deleteAccountWarning: 'This action cannot be undone. All your data will be permanently deleted.',
+    typeDeleteToConfirm: 'Type "DELETE" to confirm',
+    deleteConfirmationRequired: 'Please type "DELETE" to confirm account deletion',
+    deleteAccountConfirm: 'Are you sure you want to delete your account? This action cannot be undone.',
+    deleteAccountError: 'Failed to delete account',
+    saving: 'Saving...',
+    deleting: 'Deleting...',
   },
   
   id: {
@@ -405,5 +424,24 @@ export const translations = {
     onboardingCompleted: 'Onboarding selesai',
     savingPreferences: 'Menyimpan preferensi Anda',
     generatingSummary: 'Membuat ringkasan harian',
+    
+    // Settings
+    settings: 'Pengaturan',
+    userDetails: 'Detail Pengguna',
+    changePassword: 'Ubah Kata Sandi',
+    deleteAccount: 'Hapus Akun',
+    currentPassword: 'Kata Sandi Saat Ini',
+    newPassword: 'Kata Sandi Baru',
+    confirmNewPassword: 'Konfirmasi Kata Sandi Baru',
+    passwordChangedSuccess: 'Kata sandi berhasil diubah!',
+    passwordChangeError: 'Gagal mengubah kata sandi',
+    passwordRequirements: 'Kata sandi harus minimal 8 karakter dan mengandung huruf, angka, dan karakter khusus',
+    deleteAccountWarning: 'Tindakan ini tidak dapat dibatalkan. Semua data Anda akan dihapus secara permanen.',
+    typeDeleteToConfirm: 'Ketik "DELETE" untuk konfirmasi',
+    deleteConfirmationRequired: 'Silakan ketik "DELETE" untuk konfirmasi penghapusan akun',
+    deleteAccountConfirm: 'Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan.',
+    deleteAccountError: 'Gagal menghapus akun',
+    saving: 'Menyimpan...',
+    deleting: 'Menghapus...',
   }
 };
