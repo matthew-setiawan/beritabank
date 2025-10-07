@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { translations } from '../translations/translations';
 import LoginRequiredModal from './LoginRequiredModal';
 import SettingsModal from './SettingsModal';
-import logo from '../beritabanklogo.png';
+import logo from '../images/beritabanklogo.png';
 
 const Navbar = () => {
   const { language, setLanguage } = useLanguage();
