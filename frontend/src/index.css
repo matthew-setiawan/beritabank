@@ -2098,6 +2098,46 @@ code {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Main Loading Container for Claudia Page */
+.main-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  padding: 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f8f9fa;
+  z-index: 1000;
+}
+
+.main-loading-container h2 {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.main-loading-container p {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.main-loading-container .loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #dc3545;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
 .loading-spinner {
   width: 40px;
   height: 40px;

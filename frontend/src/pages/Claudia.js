@@ -256,6 +256,17 @@ const Claudia = () => {
     return formatted;
   };
 
+  // Show main loading screen when initially loading
+  if (summaryLoading || summaryDataLoading || adviceDataLoading) {
+    return (
+      <div className="main-loading-container">
+        <div className="loading-spinner"></div>
+        <h2>Loading content...</h2>
+        <p>Please wait while we prepare your personalized experience</p>
+      </div>
+    );
+  }
+
   return (
     <div className="claudia-page-container">
       {/* Daily Summary Section - 3/4 width */}
