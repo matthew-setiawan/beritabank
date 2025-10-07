@@ -25,6 +25,7 @@ const Claudia = () => {
   const [summaryError, setSummaryError] = useState(null);
   const [summaryDataLoading, setSummaryDataLoading] = useState(true);
   const [adviceDataLoading, setAdviceDataLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   // Preferences minimized state controls header toggle and chat resizing
   const [preferencesMinimized, setPreferencesMinimized] = useState(true);
   // Preferences data states
@@ -141,6 +142,7 @@ const Claudia = () => {
       setAdviceDataLoading(false);
     } finally {
       setSummaryLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -256,8 +258,8 @@ const Claudia = () => {
     return formatted;
   };
 
-  // Show main loading screen when initially loading
-  if (summaryLoading || summaryDataLoading || adviceDataLoading) {
+  // Show main loading screen only on initial page load
+  if (initialLoading) {
     return (
       <div className="main-loading-container">
         <div className="loading-spinner"></div>

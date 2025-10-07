@@ -2104,15 +2104,15 @@ code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: calc(100vh - 80px); /* Subtract navbar height */
   width: 100vw;
   text-align: center;
   padding: 2rem;
   position: fixed;
-  top: 0;
+  top: 80px; /* Start below navbar */
   left: 0;
   background-color: #f8f9fa;
-  z-index: 1000;
+  z-index: 100; /* Lower than navbar */
 }
 
 .main-loading-container h2 {
@@ -2136,6 +2136,28 @@ code {
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1.5rem;
+}
+
+/* Responsive loading container */
+@media (max-width: 768px) {
+  .main-loading-container {
+    height: calc(100vh - 120px); /* Account for taller mobile navbar */
+    top: 120px;
+    padding: 1rem;
+  }
+  
+  .main-loading-container h2 {
+    font-size: 1.25rem;
+  }
+  
+  .main-loading-container p {
+    font-size: 0.9rem;
+  }
+  
+  .main-loading-container .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .loading-spinner {
